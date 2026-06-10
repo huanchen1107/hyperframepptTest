@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1920, height=1080" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#07111f;color:#f2efe7}
+    body{font-family:"IBM Plex Mono",monospace}.root{position:relative;width:1920px;height:1080px;overflow:hidden;background:#07111f}
+    .scene{position:absolute;inset:0;padding:90px 110px 150px;display:flex;flex-direction:column;gap:28px;overflow:hidden;background:#07111f}
+    .scene:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 78% 22%,rgba(63,156,255,.16),rgba(7,17,31,0) 38%);pointer-events:none}
+    .grid{position:absolute;inset:0;opacity:.22;background-image:linear-gradient(rgba(63,156,255,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(63,156,255,.18) 1px,transparent 1px);background-size:80px 80px}
+    .top{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid rgba(242,239,231,.18);padding-bottom:18px}
+    .eyebrow{color:#e5b957;font-size:18px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+    h1{font-family:"IBM Plex Mono",monospace;font-size:72px;font-weight:800;line-height:.96;letter-spacing:-.06em;margin:7px 0 0;max-width:1320px}
+    .num{font-size:23px;color:#3f9cff;font-variant-numeric:tabular-nums}.stage{position:relative;z-index:2;flex:1;display:flex;align-items:stretch;gap:28px;min-height:0}
+    .panel{position:relative;background:rgba(13,29,45,.88);border:1px solid rgba(63,156,255,.32);border-radius:22px;padding:28px;box-shadow:0 18px 50px rgba(0,0,0,.24);overflow:hidden}
+    .panel.gold{border-color:rgba(229,185,87,.5)}.panel.green{border-color:rgba(98,211,155,.5)}.panel.red{border-color:rgba(255,111,111,.5)}
+    .label{font-size:17px;letter-spacing:.12em;text-transform:uppercase;color:#8fb9df}.big{font-family:"IBM Plex Mono",monospace;font-size:58px;font-weight:800;line-height:1.03}.body{font-size:23px;line-height:1.45;color:#c6d3df}
+    .metric{font-size:68px;font-weight:800;color:#e5b957;font-variant-numeric:tabular-nums}.accent{color:#3f9cff}.good{color:#62d39b}.risk{color:#ff6f6f}
+    .arrow{height:3px;background:#3f9cff;position:relative;flex:1;min-width:50px}.arrow:after{content:"";position:absolute;right:-2px;top:-6px;border-left:13px solid #3f9cff;border-top:7px solid transparent;border-bottom:7px solid transparent}
+    .flow{display:flex;align-items:center;gap:18px;width:100%}.node{min-width:180px;padding:25px 20px;border-radius:18px;background:#102942;border:1px solid rgba(63,156,255,.48);text-align:center;font-size:21px}
+    .node strong{display:block;font-size:27px;margin-bottom:8px}.cards{display:flex;gap:24px;width:100%;height:100%}.card{flex:1;display:flex;flex-direction:column;justify-content:space-between}
+    .icon{width:72px;height:72px;border:2px solid #3f9cff;border-radius:18px;display:grid;place-items:center;color:#e5b957;font-size:32px;font-weight:900}
+    .chart{position:relative;flex:1;min-height:380px;border-left:2px solid rgba(242,239,231,.25);border-bottom:2px solid rgba(242,239,231,.25)}
+    .candle{position:absolute;width:18px;border-radius:3px}.candle:before{content:"";position:absolute;width:2px;background:inherit;left:8px;top:-24px;height:calc(100% + 48px)}.up{background:#62d39b}.down{background:#ff6f6f}
+    .zone{position:absolute;border:2px solid rgba(229,185,87,.8);background:rgba(229,185,87,.15);border-radius:12px}.zone.blue{border-color:#3f9cff;background:rgba(63,156,255,.14)}
+    .ring{width:420px;height:420px;border:3px solid #3f9cff;border-radius:50%;position:relative}.ring .node{position:absolute;min-width:130px}.ring .node:nth-child(1){left:125px;top:-30px}.ring .node:nth-child(2){right:-65px;top:160px}.ring .node:nth-child(3){left:125px;bottom:-30px}.ring .node:nth-child(4){left:-65px;top:160px}
+    .center{position:absolute;left:130px;top:155px;width:160px;height:110px;border-radius:50%;display:grid;place-items:center;background:#e5b957;color:#07111f;font-size:24px;font-weight:900}
+    .stack{display:flex;flex-direction:column;gap:16px;flex:1}.row{display:flex;align-items:center;gap:18px}.bar{height:18px;border-radius:9px;background:#173650;overflow:hidden;flex:1}.fill{height:100%;background:#3f9cff;transform-origin:left}.pill{padding:10px 16px;border-radius:999px;background:#102942;border:1px solid rgba(63,156,255,.45);font-size:18px}
+    .network{display:grid;grid-template-columns:repeat(5,1fr);gap:22px;align-items:center;flex:1}.layer{display:flex;flex-direction:column;gap:15px;align-items:center}.dot{width:28px;height:28px;border:2px solid #3f9cff;border-radius:50%;background:#102942}
+    .compare{display:grid;grid-template-columns:1fr 180px 1fr;gap:26px;width:100%;height:100%;align-items:center}.versus{font-family:"IBM Plex Mono",monospace;font-size:70px;text-align:center;color:#e5b957}
+    .check{display:flex;gap:16px;align-items:flex-start;font-size:22px;line-height:1.35}.check b{font-size:30px;color:#62d39b}
+    .caption{position:absolute;z-index:100;left:170px;right:170px;bottom:38px;padding:17px 28px;border-radius:14px;background:rgba(4,11,20,.92);border:1px solid rgba(63,156,255,.45);font-size:38px;font-weight:700;text-align:center;opacity:0}
+    .hud{position:absolute;z-index:90;top:24px;left:38px;right:38px;display:flex;gap:14px;align-items:center;font-size:15px;letter-spacing:.14em;text-transform:uppercase}.hud span{padding:7px 12px;background:#102942;border:1px solid rgba(63,156,255,.45);border-radius:8px}.hud-line{height:3px;flex:1;background:#173650;overflow:hidden}.hud-progress{height:100%;background:#e5b957;transform:scaleX(0);transform-origin:left}
+    .shutter{position:absolute;z-index:80;left:0;width:100%;height:216px;background:#3f9cff;opacity:0}.s1{top:0}.s2{top:216px}.s3{top:432px}.s4{top:648px}.s5{top:864px}
+  </style>
+  <style>
+    /* Excalidraw-style visual system */
+    html,body{background:#fffdf6;color:#1b1b1f}
+    body{font-family:cursive}
+    .root{background:#fffdf6;color:#1b1b1f}
+    .root:before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.28;background-image:radial-gradient(#d8d2c5 1.2px,transparent 1.2px);background-size:19px 19px}
+    .scene{background:transparent;color:#1b1b1f}
+    .scene:before{background:linear-gradient(112deg,transparent 0 68%,rgba(168,216,255,.22) 68% 72%,transparent 72% 100%)}
+    .grid{opacity:.13;background-image:linear-gradient(rgba(27,27,31,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(27,27,31,.18) 1px,transparent 1px);background-size:64px 64px}
+    .top{border-bottom:4px solid #1b1b1f;padding-bottom:15px;transform:rotate(-.15deg)}
+    .top:after{content:"";position:absolute;left:2%;right:11%;bottom:-10px;height:4px;background:#a8d8ff;border-radius:50%;transform:rotate(.35deg)}
+    .eyebrow{color:#5d3fd3;font-size:19px;font-weight:800;letter-spacing:.08em;text-transform:none}
+    h1,.big{font-family:cursive;letter-spacing:-.035em}
+    h1{font-size:68px;line-height:1.04}
+    .num{color:#1b1b1f;font-family:"Courier New",monospace;font-weight:900;background:#ffe9a8;border:3px solid #1b1b1f;border-radius:48% 52% 45% 55%;padding:9px 15px;transform:rotate(2deg)}
+    .panel{background:rgba(255,253,246,.94);border:4px solid #1b1b1f;border-radius:13px 19px 12px 17px;box-shadow:7px 8px 0 rgba(27,27,31,.14);overflow:hidden}
+    .panel:nth-child(even){transform:rotate(.45deg)}.panel:nth-child(odd){transform:rotate(-.35deg)}
+    .panel:after{content:"";position:absolute;inset:7px -5px -5px 6px;border:2px solid rgba(27,27,31,.28);border-radius:17px 11px 19px 12px;pointer-events:none}
+    .panel.gold{background:#fff6cf;border-color:#1b1b1f}.panel.green{background:#ddf7e8;border-color:#1b1b1f}.panel.red{background:#ffe1e1;border-color:#1b1b1f}
+    .label{color:#5f6068;font-weight:900;letter-spacing:.06em}
+    .body{color:#42434a;font-size:24px;font-weight:600}
+    .metric{color:#5d3fd3;text-decoration:underline;text-decoration-color:#ffe07a;text-decoration-thickness:13px;text-underline-offset:-6px;text-decoration-skip-ink:none}
+    .accent{color:#1565c0}.good{color:#167447}.risk{color:#b52b2b}
+    .icon{border:4px solid #1b1b1f;border-radius:49% 44% 53% 46%;background:#a8d8ff;color:#1b1b1f;box-shadow:4px 4px 0 rgba(27,27,31,.15);transform:rotate(-4deg)}
+    .card:nth-child(2n) .icon{background:#ffe9a8;transform:rotate(5deg)}.card:nth-child(3n) .icon{background:#b9edcf}
+    .node{background:#fffdf6;border:4px solid #1b1b1f;border-radius:12px 18px 10px 16px;box-shadow:5px 5px 0 rgba(27,27,31,.13);font-family:cursive}
+    .flow .node:nth-of-type(4n+1){background:#dceeff;transform:rotate(-1deg)}.flow .node:nth-of-type(4n+3){background:#fff1bd;transform:rotate(1deg)}
+    .arrow{height:5px;background:#1b1b1f;border-radius:60% 40% 50% 50%;transform:rotate(-1deg)}
+    .arrow:after{right:-4px;top:-10px;border-left:18px solid #1b1b1f;border-top:11px solid transparent;border-bottom:11px solid transparent}
+    .chart{border-left:4px solid #1b1b1f;border-bottom:4px solid #1b1b1f;background:rgba(168,216,255,.12)}
+    .candle{border:2px solid #1b1b1f;border-radius:2px 5px 2px 4px}.candle:before{width:3px;left:6px}.up{background:#72cf9d}.down{background:#ff9696}
+    .zone{border:4px dashed #b57900;background:rgba(255,233,168,.48);border-radius:9px 14px 8px 16px;transform:rotate(-1deg)}.zone.blue{border-color:#1565c0;background:rgba(168,216,255,.48);transform:rotate(1deg)}
+    .pill{background:#fffdf6;border:3px solid #1b1b1f;border-radius:48% 52% 45% 55%;font-weight:800;box-shadow:3px 3px 0 rgba(27,27,31,.12)}
+    .ring{border:5px solid #1b1b1f;border-radius:48% 52% 46% 54%;background:rgba(168,216,255,.18);box-shadow:7px 7px 0 rgba(27,27,31,.12)}
+    .center{background:#ffe9a8;color:#1b1b1f;border:4px solid #1b1b1f;border-radius:53% 47% 55% 45%}
+    .bar{height:22px;border:3px solid #1b1b1f;background:#fffdf6;border-radius:12px 8px 13px 9px}.fill{background:#a8d8ff}
+    .dot{border:4px solid #1b1b1f;background:#fffdf6;box-shadow:3px 3px 0 rgba(27,27,31,.14)}
+    .versus{font-family:cursive;color:#b57900;transform:rotate(-7deg)}
+    .check b{color:#167447}
+    .caption{left:150px;right:150px;bottom:32px;background:#fffdf6;color:#1b1b1f;border:4px solid #1b1b1f;border-radius:12px 17px 11px 15px;box-shadow:7px 7px 0 rgba(27,27,31,.18);font-family:cursive;font-size:36px}
+    .hud{color:#1b1b1f;font-family:cursive;font-weight:900;letter-spacing:.06em}
+    .hud span{background:#fffdf6;border:3px solid #1b1b1f;border-radius:10px 15px 9px 13px;box-shadow:3px 3px 0 rgba(27,27,31,.13)}
+    .hud-line{height:8px;background:#fffdf6;border:2px solid #1b1b1f;border-radius:40%}.hud-progress{background:#ffe07a}
+    .shutter{background:#ffe07a;border-top:4px solid #1b1b1f;border-bottom:4px solid #1b1b1f}
+  </style>
+</head>
+<body>
+<div id="root" class="root" data-composition-id="main" data-start="0" data-duration="204.516" data-width="1920" data-height="1080">
+  <div class="hud"><span>SMC × DRL</span><div class="hud-line"><div class="hud-progress"></div></div><span>Native HTML Remake</span></div>
+  <div class="shutter s1"></div><div class="shutter s2"></div><div class="shutter s3"></div><div class="shutter s4"></div><div class="shutter s5"></div>
+  <audio id="voice-01" class="clip" src="narration/slide-01.mp3" data-start="0" data-duration="11.328" data-track-index="30"></audio>
+  <audio id="voice-02" class="clip" src="narration/slide-02.mp3" data-start="12.328" data-duration="11.112" data-track-index="30"></audio>
+  <audio id="voice-03" class="clip" src="narration/slide-03.mp3" data-start="24.44" data-duration="11.64" data-track-index="30"></audio>
+  <audio id="voice-04" class="clip" src="narration/slide-04.mp3" data-start="37.08" data-duration="11.088" data-track-index="30"></audio>
+  <audio id="voice-05" class="clip" src="narration/slide-05.mp3" data-start="49.168" data-duration="11.4" data-track-index="30"></audio>
+  <audio id="voice-06" class="clip" src="narration/slide-06.mp3" data-start="61.568" data-duration="10.104" data-track-index="30"></audio>
+  <audio id="voice-07" class="clip" src="narration/slide-07.mp3" data-start="72.672" data-duration="13.752" data-track-index="30"></audio>
+  <audio id="voice-08" class="clip" src="narration/slide-08.mp3" data-start="87.424" data-duration="11.232" data-track-index="30"></audio>
+  <audio id="voice-09" class="clip" src="narration/slide-09.mp3" data-start="99.656" data-duration="13.488" data-track-index="30"></audio>
+  <audio id="voice-10" class="clip" src="narration/slide-10.mp3" data-start="114.144" data-duration="9.768" data-track-index="30"></audio>
+  <audio id="voice-11" class="clip" src="narration/slide-11.mp3" data-start="124.912" data-duration="12.744" data-track-index="30"></audio>
+  <audio id="voice-12" class="clip" src="narration/slide-12.mp3" data-start="138.656" data-duration="11.208" data-track-index="30"></audio>
+  <audio id="voice-13" class="clip" src="narration/slide-13.mp3" data-start="150.864" data-duration="10.872" data-track-index="30"></audio>
+  <audio id="voice-14" class="clip" src="narration/slide-14.mp3" data-start="162.736" data-duration="11.472" data-track-index="30"></audio>
+  <audio id="voice-15" class="clip" src="narration/slide-15.mp3" data-start="175.208" data-duration="11.184" data-track-index="30"></audio>
+  <audio id="voice-16" class="clip" src="narration/slide-16.mp3" data-start="187.392" data-duration="15.624" data-track-index="30"></audio>
+</div>
+<script>
+window.__timelines=window.__timelines||{};
+var starts=[0,12.328,24.44,37.08,49.168,61.568,72.672,87.424,99.656,114.144,124.912,138.656,150.864,162.736,175.208,187.392];
+var durations=[12.928,12.712,13.24,12.688,13,11.704,15.352,12.832,15.088,11.368,14.344,12.808,12.472,13.072,12.784,17.224];
+var audioDur=[11.328,11.112,11.64,11.088,11.4,10.104,13.752,11.232,13.488,9.768,12.744,11.208,10.872,11.472,11.184,15.624];
+var narration=[
+"本專題建構一套結合聰明錢概念與深度強化學習的智能量化交易平台，目標是讓代理人理解多時區市場結構，並做出一致的交易決策。",
+"內容分為五個部分：研究背景、相關方法、演算法設計、系統實作與實驗成果，最後整理結論與未來發展方向。",
+"平台以聰明錢概念分析市場微觀結構，透過多時區特徵工程建立狀態，再由強化學習代理人輸出交易策略，形成完整的決策流程。",
+"聰明錢概念觀察大型機構交易者留下的市場痕跡，例如流動性、價格失衡與訂單區塊，用來判斷潛在的價格方向與交易機會。",
+"在強化學習環境中，我們把流動性掃蕩、價格失衡區，以及訂單區塊等訊號量化，讓原本主觀的圖表判讀轉換為可學習的數值特徵。",
+"透過多時間框架設計，代理人可同時掌握長週期趨勢與短週期進場時機，降低只看單一時間尺度所造成的判斷偏誤。",
+"強化學習迴圈由環境、狀態、動作與獎勵構成。代理人根據市場狀態採取行動，再由結果回饋調整策略，逐步提升決策品質。",
+"本專案的三大核心亮點，是可量化的聰明錢特徵、多時間框架的深度強化學習代理人，以及可直接操作與檢視結果的視覺化介面。",
+"整體系統分為資料層、環境層、代理人層與介面層。資料經過特徵工程後進入策略網路，最後在互動戰情室呈現分析與交易結果。",
+"狀態空間將不同時間框架的市場資訊與聰明錢特徵整合成八十二維向量，提供雙重深度 Q 網路進行訓練與決策。",
+"動作空間包含觀望、買進與賣出，並搭配動態風險報酬區間。代理人不只選擇方向，也必須同時考量進場、停利與停損位置。",
+"獎勵函數除了衡量交易損益，也加入持倉時間、衝突訊號、回撤與交易頻率等懲罰，使策略更重視穩定性與實務風險。",
+"模型採用雙重深度 Q 網路架構，利用主網路選擇動作、目標網路估計價值，並透過經驗回放降低訓練波動與過度估計問題。",
+"與基礎版本相比，進階模型加入更完整的多時區輸入、風險報酬控制與聰明錢特徵，讓策略能在不同市場條件下做出更細緻的判斷。",
+"系統實作流程包含資料載入、特徵分析、策略選擇、人工智慧建議與交易配對檢視，形成可重複操作的五步驟工作空間。",
+"總結來說，本專案成功把聰明錢概念量化為強化學習狀態，完成從資料、訓練到視覺化的端到端流程。未來可進一步導入更進階演算法、動態倉位控制與實盤測試。"
+];
+function candles(n){var h="";for(var i=0;i<n;i++){var x=40+i*55,y=80+((i*73)%250),ht=70+((i*47)%150),u=i%3!==0;h+=`<i class="candle ${u?"up":"down"}" style="left:${x}px;bottom:${y}px;height:${ht}px"></i>`}return h}
+function cards(items){return `<div class="cards">${items.map((x,i)=>`<div class="panel card ${i%3===1?"gold":i%3===2?"green":""} item"><div class="icon">${x[0]}</div><div><div class="label">${x[1]}</div><div class="big">${x[2]}</div></div><div class="body">${x[3]}</div></div>`).join("")}</div>`}
+function flow(items){return `<div class="flow" data-layout-allow-overflow>${items.map((x,i)=>`${i?'<div class="arrow item"></div>':''}<div class="node item"><strong>${x[0]}</strong>${x[1]}</div>`).join("")}</div>`}
+function header(i,eye,title){return `<div class="grid"></div><div class="top"><div><div class="eyebrow">${eye}</div><h1>${title}</h1></div><div class="num">${String(i+1).padStart(2,"0")} / 16</div></div>`}
+function sceneBody(i){
+ var arr=[
+ `<div class="stage"><div class="panel" style="width:42%"><div class="eyebrow item">SMC × DRL</div><div class="big item" style="font-size:94px;margin-top:30px">智能量化<br><span class="accent">交易平台</span></div><div class="body item" style="margin-top:35px">市場結構理解 × 多時區狀態 × 自主決策</div></div><div class="panel chart item">${candles(13)}<div class="zone blue" style="left:210px;top:130px;width:250px;height:150px"></div><div class="zone" style="right:90px;bottom:110px;width:230px;height:130px"></div></div></div>`,
+ cards([["01","Introduction","研究背景","為什麼需要可量化的市場結構。"],["02","Related Work","相關方法","SMC 與多時間框架的理論基礎。"],["03","Algorithm","演算法設計","將市場轉換成強化學習狀態。"],["04","Implementation","系統實作","從資料到互動戰情室。"],["05","Conclusion","成果展望","驗收能力並規劃下一步。"]]),
+ `<div class="stage">${flow([["SMC","微觀結構"],["MTF","多時區同步"],["DRL","策略代理人"],["UI","決策輸出"]])}</div>`,
+ `<div class="stage">${cards([["R","Retail","散戶交易","追逐價格與短期訊號。"],["S","Method","SMC 方法","解讀流動性與機構足跡。"],["I","Institution","機構資金","塑造價格結構與方向。"]])}</div>`,
+ `<div class="stage"><div class="panel chart item" style="width:100%">${candles(28)}<div class="zone blue item" style="left:190px;top:100px;width:250px;height:200px"></div><div class="zone item" style="left:760px;bottom:150px;width:350px;height:130px"></div><div class="pill item" style="position:absolute;left:160px;top:45px">Liquidity Sweep</div><div class="pill item" style="position:absolute;left:760px;bottom:90px">Order Block</div><div class="pill item" style="position:absolute;right:100px;top:110px">BOS / CHoCH</div></div></div>`,
+ `<div class="stage">${cards([["W","Weekly","長週期方向","辨認主要趨勢與市場階段。"],["D","Daily","中週期結構","確認關鍵流動性與失衡區。"],["H","Hourly","短週期進場","精準選擇交易時機。"]])}</div>`,
+ `<div class="stage"><div class="ring item"><div class="node item">STATE</div><div class="node item">ACTION</div><div class="node item">REWARD</div><div class="node item">ENV</div><div class="center item">AGENT</div></div><div class="panel" style="flex:1"><div class="metric item">Objective</div><div class="big item">在市場回饋中<br>持續修正策略</div><div class="body item" style="margin-top:24px">觀察 → 決策 → 執行 → 評估 → 學習</div></div></div>`,
+ `<div class="stage">${cards([["S","Signal","SMC 特徵","把主觀圖表判讀量化。"],["M","Memory","多時區狀態","同時理解長短週期。"],["V","Visibility","互動介面","讓決策過程可以檢視。"]])}</div>`,
+ `<div class="stage">${flow([["DATA","yfinance API"],["ENV","SMC 特徵工程"],["AGENT","MTF Double DQN"],["UI","Streamlit 戰情室"]])}</div>`,
+ `<div class="stage"><div class="panel" style="width:48%"><div class="metric item">82D</div><div class="big item">State Vector</div><div class="stack" style="margin-top:30px">${["W1 結構","D1 流動性","H4 趨勢","H1 進場"].map((x,i)=>`<div class="row item"><span class="pill">${x}</span><div class="bar"><div class="fill" style="width:${55+i*12}%"></div></div></div>`).join("")}</div></div><div class="panel network item"><div class="layer">${"<i class=dot></i>".repeat(6)}</div><div class="layer">${"<i class=dot></i>".repeat(5)}</div><div class="layer">${"<i class=dot></i>".repeat(4)}</div><div class="layer">${"<i class=dot></i>".repeat(3)}</div><div class="layer">${"<i class=dot></i>".repeat(3)}</div></div></div>`,
+ `<div class="stage">${cards([["H","Hold","觀望","等待更高品質訊號。"],["B","Buy","買進","設定進場、停利與停損。"],["S","Sell","賣出","依風險報酬控制部位。"]])}</div>`,
+ `<div class="stage"><div class="panel green" style="flex:1"><div class="label">Positive Incentives</div><div class="metric good item">＋ Profit</div><div class="body item">有效獲利與多時區共識。</div></div><div class="panel gold item" style="width:280px;display:grid;place-items:center"><div class="big" style="text-align:center">Reward<br>Balance</div></div><div class="panel red" style="flex:1"><div class="label">Negative Penalties</div><div class="metric risk item">− Risk</div><div class="body item">回撤、衝突、過度交易。</div></div></div>`,
+ `<div class="stage"><div class="panel" style="width:100%">${flow([["ENV","狀態與動作"],["BUFFER","經驗回放"],["MAIN","主網路選擇"],["TARGET","目標網路估值"],["LOSS","降低誤差"]])}<div class="body item" style="margin-top:60px;text-align:center">Double DQN：拆分選擇與估值，降低過度估計</div></div></div>`,
+ `<div class="stage compare"><div class="panel item"><div class="label">V1 Baseline</div><div class="metric">Basic</div><div class="body">單純狀態輸入<br>固定風控<br>基礎 DQN</div></div><div class="versus item">→</div><div class="panel gold item"><div class="label">V2 Advanced</div><div class="metric">MTF+</div><div class="body">多時區輸入<br>動態風險報酬<br>完整 SMC 特徵</div></div></div>`,
+ `<div class="stage">${flow([["STEP 0","資料載入"],["STEP 1","SMC 特徵"],["STEP 2","策略選擇"],["STEP 3","AI 建議"],["STEP 4","配對檢視"]])}</div>`,
+ `<div class="stage"><div class="panel green" style="flex:1"><div class="label">成果驗收</div><div class="stack" style="margin-top:28px">${["82 維精確狀態矩陣","Double DQN 多時區策略","端到端 Streamlit 流程"].map(x=>`<div class="check item"><b>✓</b><span>${x}</span></div>`).join("")}</div></div><div class="panel gold" style="flex:1"><div class="label">未來展望</div><div class="stack" style="margin-top:28px">${["導入 PPO 與 Transformer","動態倉位與保證金管理","實盤 API 與 Forward Testing"].map(x=>`<div class="check item"><b>→</b><span>${x}</span></div>`).join("")}</div></div></div>`
+ ];return arr[i]
+}
+var titles=["市場結構，成為可學習的語言","五段式研究路徑","從市場訊號到自主決策","誰在推動市場？","把主觀圖表轉成數值特徵","多時區，建立市場記憶","強化學習的閉環","三個核心能力","端到端系統架構","82 維狀態空間","動作與動態風控","獎勵塑造策略性格","Double DQN 模型管線","從基礎模型到進階代理人","五步驟工作空間","成果落地，能力持續進化"];
+var eyes=["Opening Thesis","Research Map","Platform Workflow","Smart Money Concept","Quantified SMC","Multi-Timeframe","RL Loop & Objective","Core Advantages","System Architecture","State Space","Action Space & RR Box","Reward Shaping","Model Pipeline","Model Evolution","Implementation Workflow","Conclusion & Outlook"];
+var root=document.getElementById("root");
+for(var i=0;i<16;i++){var s=document.createElement("section");s.id="scene-"+(i+1);s.className="clip scene";s.dataset.start=starts[i];s.dataset.duration=durations[i];s.dataset.trackIndex=i+1;s.innerHTML=header(i,eyes[i],titles[i])+sceneBody(i);root.appendChild(s)}
+var tl=gsap.timeline({paused:true});tl.from(".hud",{opacity:0,y:-30,duration:.7,ease:"expo.out"},.2);tl.to(".hud-progress",{scaleX:1,duration:204,ease:"none"},.3);
+for(var i=0;i<16;i++){var st=starts[i],sel="#scene-"+(i+1),items=sel+" .item";tl.from(sel,{filter:"blur(8px)",duration:.7,ease:"power3.out",overwrite:"auto"},st+.05);tl.from(sel+" .top",{opacity:0,y:-45,duration:.65,ease:"expo.out",overwrite:"auto"},st+.18);tl.from(items,{opacity:0,y:(i%2?45:-35),scale:.92,rotation:(i%2?1:-1),duration:.62,stagger:{amount:.48,from:i%3===0?"start":"center"},ease:i%3===0?"back.out(1.3)":i%3===1?"expo.out":"circ.out",overwrite:"auto"},st+.55);if(document.querySelector(sel+" .fill"))tl.to(sel+" .fill",{scaleX:1,duration:audioDur[i]*.65,ease:"power2.inOut",overwrite:"auto"},st+1);if(document.querySelector(sel+" .dot"))tl.to(sel+" .dot",{scale:1.22,backgroundColor:"#e5b957",duration:.45,stagger:.08,yoyo:true,repeat:4,ease:"sine.inOut",overwrite:"auto"},st+1.4);if(i>0){tl.fromTo(".shutter",{opacity:.82,scaleX:0,transformOrigin:i%2?"left":"right"},{opacity:.82,scaleX:1,duration:.2,stagger:.035,ease:"power4.in",overwrite:"auto"},st-.2);tl.to(".shutter",{opacity:0,scaleX:0,transformOrigin:i%2?"right":"left",duration:.28,stagger:.025,ease:"expo.out",overwrite:"auto"},st+.02)}}
+for(var i=0;i<16;i++){var chunks=narration[i].match(/[^，。；：]+[，。；：]?/g).filter(Boolean),total=chunks.reduce((a,x)=>a+x.length,0),cursor=starts[i]+.1;chunks.forEach((text,j)=>{var d=audioDur[i]*(text.length/total),el=document.createElement("div");el.className="caption";el.textContent=text;root.appendChild(el);tl.fromTo(el,{opacity:0,y:28,scale:.95},{opacity:1,y:0,scale:1,duration:.3,ease:j%2?"expo.out":"back.out(1.25)",overwrite:"auto"},cursor);tl.to(el,{opacity:0,y:-12,duration:.16,ease:"power3.in",overwrite:"auto"},cursor+d-.16);tl.set(el,{opacity:0,visibility:"hidden"},cursor+d);cursor+=d})}
+tl.to("#scene-16",{opacity:0,scale:.96,duration:.7,ease:"power2.in"},203.7);window.__timelines.main=tl;
+</script>
+</body>
+</html>
