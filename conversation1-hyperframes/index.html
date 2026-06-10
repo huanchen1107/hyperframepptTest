@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #161616;
+      }
+      .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        object-fit: contain;
+        background: #f4f2ed;
+        box-shadow: 0 16px 50px rgba(0, 0, 0, 0.24);
+        transform-origin: center center;
+        will-change: transform, opacity, filter;
+      }
+      .motion-overlay {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+      #vignette {
+        z-index: 40;
+        background: radial-gradient(circle at center, rgba(31, 79, 120, 0) 55%, rgba(22, 22, 22, 0.18) 100%);
+      }
+      #scan-line {
+        z-index: 46;
+        height: 5px;
+        top: 0;
+        bottom: auto;
+        background: rgba(31, 79, 120, 0.55);
+        box-shadow: 0 0 24px rgba(31, 79, 120, 0.8);
+        opacity: 0;
+      }
+      #focus-ring {
+        z-index: 45;
+        width: 500px;
+        height: 310px;
+        inset: auto;
+        left: 710px;
+        top: 330px;
+        border: 4px solid rgba(197, 163, 90, 0.85);
+        border-radius: 28px;
+        box-shadow: 0 0 0 8px rgba(197, 163, 90, 0.12), 0 0 36px rgba(197, 163, 90, 0.38);
+        opacity: 0;
+      }
+      #energy-flash {
+        z-index: 80;
+        background: #f4f2ed;
+        opacity: 0;
+      }
+      .transition-bar {
+        position: absolute;
+        z-index: 75;
+        left: 0;
+        width: 100%;
+        height: 216px;
+        background: #1f4f78;
+        transform-origin: left center;
+        opacity: 0;
+      }
+      #bar-1 { top: 0; }
+      #bar-2 { top: 216px; }
+      #bar-3 { top: 432px; }
+      #bar-4 { top: 648px; }
+      #bar-5 { top: 864px; }
+      #hud {
+        position: absolute;
+        z-index: 90;
+        top: 28px;
+        left: 36px;
+        right: 36px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        color: #071c2e;
+        font-family: "Inter", sans-serif;
+        font-size: 17px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        text-shadow: 0 1px 8px rgba(244, 242, 237, 0.9);
+      }
+      #hud span {
+        padding: 7px 11px;
+        border-radius: 8px;
+        color: #ffffff;
+        background: #071c2e;
+        box-shadow: 0 4px 14px rgba(22, 22, 22, 0.12);
+      }
+      #hud-rule {
+        height: 3px;
+        flex: 1;
+        background: rgba(31, 79, 120, 0.25);
+        overflow: hidden;
+      }
+      #hud-progress {
+        width: 100%;
+        height: 100%;
+        background: #c5a35a;
+        transform: scaleX(0);
+        transform-origin: left center;
+      }
+      .caption {
+        position: absolute;
+        left: 160px;
+        right: 160px;
+        bottom: 42px;
+        z-index: 100;
+        padding: 18px 30px 20px;
+        border-radius: 14px;
+        background: rgba(20, 24, 27, 0.88);
+        color: #ffffff;
+        font-family: "Inter", sans-serif;
+        font-size: 42px;
+        font-weight: 650;
+        line-height: 1.35;
+        letter-spacing: 0.02em;
+        text-align: center;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="204.516"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="vignette" class="motion-overlay" data-layout-ignore></div>
+      <div id="scan-line" class="motion-overlay" data-layout-ignore></div>
+      <div id="focus-ring" class="motion-overlay" data-layout-ignore></div>
+      <div id="energy-flash" class="motion-overlay" data-layout-ignore></div>
+      <div id="bar-1" class="transition-bar" data-layout-ignore></div>
+      <div id="bar-2" class="transition-bar" data-layout-ignore></div>
+      <div id="bar-3" class="transition-bar" data-layout-ignore></div>
+      <div id="bar-4" class="transition-bar" data-layout-ignore></div>
+      <div id="bar-5" class="transition-bar" data-layout-ignore></div>
+      <div id="hud" data-layout-ignore>
+        <span>SMC × DRL</span>
+        <div id="hud-rule"><div id="hud-progress"></div></div>
+        <span>Intelligent Quant Platform</span>
+      </div>
+      <img id="slide-01" class="clip slide" src="slides/slide-01.jpg" data-start="0" data-duration="12.928" data-track-index="1" style="z-index:1" />
+      <img id="slide-02" class="clip slide" src="slides/slide-02.jpg" data-start="12.328" data-duration="12.712" data-track-index="2" style="z-index:2" />
+      <img id="slide-03" class="clip slide" src="slides/slide-03.jpg" data-start="24.44" data-duration="13.24" data-track-index="3" style="z-index:3" />
+      <img id="slide-04" class="clip slide" src="slides/slide-04.jpg" data-start="37.08" data-duration="12.688" data-track-index="4" style="z-index:4" />
+      <img id="slide-05" class="clip slide" src="slides/slide-05.jpg" data-start="49.168" data-duration="13" data-track-index="5" style="z-index:5" />
+      <img id="slide-06" class="clip slide" src="slides/slide-06.jpg" data-start="61.568" data-duration="11.704" data-track-index="6" style="z-index:6" />
+      <img id="slide-07" class="clip slide" src="slides/slide-07.jpg" data-start="72.672" data-duration="15.352" data-track-index="7" style="z-index:7" />
+      <img id="slide-08" class="clip slide" src="slides/slide-08.jpg" data-start="87.424" data-duration="12.832" data-track-index="8" style="z-index:8" />
+      <img id="slide-09" class="clip slide" src="slides/slide-09.jpg" data-start="99.656" data-duration="15.088" data-track-index="9" style="z-index:9" />
+      <img id="slide-10" class="clip slide" src="slides/slide-10.jpg" data-start="114.144" data-duration="11.368" data-track-index="10" style="z-index:10" />
+      <img id="slide-11" class="clip slide" src="slides/slide-11.jpg" data-start="124.912" data-duration="14.344" data-track-index="11" style="z-index:11" />
+      <img id="slide-12" class="clip slide" src="slides/slide-12.jpg" data-start="138.656" data-duration="12.808" data-track-index="12" style="z-index:12" />
+      <img id="slide-13" class="clip slide" src="slides/slide-13.jpg" data-start="150.864" data-duration="12.472" data-track-index="13" style="z-index:13" />
+      <img id="slide-14" class="clip slide" src="slides/slide-14.jpg" data-start="162.736" data-duration="13.072" data-track-index="14" style="z-index:14" />
+      <img id="slide-15" class="clip slide" src="slides/slide-15.jpg" data-start="175.208" data-duration="12.784" data-track-index="15" style="z-index:15" />
+      <img id="slide-16" class="clip slide" src="slides/slide-16.jpg" data-start="187.392" data-duration="17.224" data-track-index="16" style="z-index:16" />
+      <audio id="voice-01" class="clip" src="narration/slide-01.mp3" data-start="0" data-duration="11.328" data-track-index="20"></audio>
+      <audio id="voice-02" class="clip" src="narration/slide-02.mp3" data-start="12.328" data-duration="11.112" data-track-index="20"></audio>
+      <audio id="voice-03" class="clip" src="narration/slide-03.mp3" data-start="24.44" data-duration="11.64" data-track-index="20"></audio>
+      <audio id="voice-04" class="clip" src="narration/slide-04.mp3" data-start="37.08" data-duration="11.088" data-track-index="20"></audio>
+      <audio id="voice-05" class="clip" src="narration/slide-05.mp3" data-start="49.168" data-duration="11.4" data-track-index="20"></audio>
+      <audio id="voice-06" class="clip" src="narration/slide-06.mp3" data-start="61.568" data-duration="10.104" data-track-index="20"></audio>
+      <audio id="voice-07" class="clip" src="narration/slide-07.mp3" data-start="72.672" data-duration="13.752" data-track-index="20"></audio>
+      <audio id="voice-08" class="clip" src="narration/slide-08.mp3" data-start="87.424" data-duration="11.232" data-track-index="20"></audio>
+      <audio id="voice-09" class="clip" src="narration/slide-09.mp3" data-start="99.656" data-duration="13.488" data-track-index="20"></audio>
+      <audio id="voice-10" class="clip" src="narration/slide-10.mp3" data-start="114.144" data-duration="9.768" data-track-index="20"></audio>
+      <audio id="voice-11" class="clip" src="narration/slide-11.mp3" data-start="124.912" data-duration="12.744" data-track-index="20"></audio>
+      <audio id="voice-12" class="clip" src="narration/slide-12.mp3" data-start="138.656" data-duration="11.208" data-track-index="20"></audio>
+      <audio id="voice-13" class="clip" src="narration/slide-13.mp3" data-start="150.864" data-duration="10.872" data-track-index="20"></audio>
+      <audio id="voice-14" class="clip" src="narration/slide-14.mp3" data-start="162.736" data-duration="11.472" data-track-index="20"></audio>
+      <audio id="voice-15" class="clip" src="narration/slide-15.mp3" data-start="175.208" data-duration="11.184" data-track-index="20"></audio>
+      <audio id="voice-16" class="clip" src="narration/slide-16.mp3" data-start="187.392" data-duration="15.624" data-track-index="20"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const starts = [0, 12.328, 24.44, 37.08, 49.168, 61.568, 72.672, 87.424, 99.656, 114.144, 124.912, 138.656, 150.864, 162.736, 175.208, 187.392];
+      const audioDurations = [11.328, 11.112, 11.64, 11.088, 11.4, 10.104, 13.752, 11.232, 13.488, 9.768, 12.744, 11.208, 10.872, 11.472, 11.184, 15.624];
+      const focusPaths = [
+        [[170, 180, 1.12], [800, 390, 0.92], [1270, 350, 1.05]],
+        [[420, 210, 0.9], [420, 400, 0.9], [420, 600, 0.9]],
+        [[210, 280, 0.86], [720, 330, 1.0], [1300, 330, 0.94]],
+        [[160, 280, 0.9], [700, 300, 0.8], [1260, 280, 0.9]],
+        [[130, 190, 0.94], [750, 570, 0.88], [1260, 310, 0.94]],
+        [[180, 230, 0.92], [250, 590, 0.9], [1060, 320, 1.02]],
+        [[140, 300, 1.0], [650, 260, 0.82], [1180, 280, 1.02]],
+        [[120, 300, 0.92], [710, 300, 0.92], [1280, 300, 0.92]],
+        [[80, 300, 0.82], [550, 300, 0.82], [1040, 300, 0.82], [1430, 300, 0.82]],
+        [[120, 260, 0.88], [700, 260, 0.9], [1240, 260, 0.96]],
+        [[150, 300, 0.94], [1030, 240, 1.02], [1230, 520, 0.9]],
+        [[100, 230, 0.9], [150, 600, 0.9], [760, 280, 0.76], [1260, 300, 0.92]],
+        [[120, 260, 0.9], [660, 350, 0.9], [1240, 270, 0.94]],
+        [[100, 270, 0.92], [700, 280, 0.86], [1240, 260, 1.0]],
+        [[80, 320, 0.8], [560, 320, 0.8], [1030, 320, 0.8], [1420, 320, 0.8]],
+        [[120, 260, 1.08], [120, 610, 1.02], [1030, 270, 1.08], [1030, 610, 1.02]]
+      ];
+      const narration = [
+        "本專題建構一套結合聰明錢概念與深度強化學習的智能量化交易平台，目標是讓代理人理解多時區市場結構，並做出一致的交易決策。",
+        "內容分為五個部分：研究背景、相關方法、演算法設計、系統實作與實驗成果，最後整理結論與未來發展方向。",
+        "平台以聰明錢概念分析市場微觀結構，透過多時區特徵工程建立狀態，再由強化學習代理人輸出交易策略，形成完整的決策流程。",
+        "聰明錢概念觀察大型機構交易者留下的市場痕跡，例如流動性、價格失衡與訂單區塊，用來判斷潛在的價格方向與交易機會。",
+        "在強化學習環境中，我們把流動性掃蕩、價格失衡區，以及訂單區塊等訊號量化，讓原本主觀的圖表判讀轉換為可學習的數值特徵。",
+        "透過多時間框架設計，代理人可同時掌握長週期趨勢與短週期進場時機，降低只看單一時間尺度所造成的判斷偏誤。",
+        "強化學習迴圈由環境、狀態、動作與獎勵構成。代理人根據市場狀態採取行動，再由結果回饋調整策略，逐步提升決策品質。",
+        "本專案的三大核心亮點，是可量化的聰明錢特徵、多時間框架的深度強化學習代理人，以及可直接操作與檢視結果的視覺化介面。",
+        "整體系統分為資料層、環境層、代理人層與介面層。資料經過特徵工程後進入策略網路，最後在互動戰情室呈現分析與交易結果。",
+        "狀態空間將不同時間框架的市場資訊與聰明錢特徵整合成八十二維向量，提供雙重深度 Q 網路進行訓練與決策。",
+        "動作空間包含觀望、買進與賣出，並搭配動態風險報酬區間。代理人不只選擇方向，也必須同時考量進場、停利與停損位置。",
+        "獎勵函數除了衡量交易損益，也加入持倉時間、衝突訊號、回撤與交易頻率等懲罰，使策略更重視穩定性與實務風險。",
+        "模型採用雙重深度 Q 網路架構，利用主網路選擇動作、目標網路估計價值，並透過經驗回放降低訓練波動與過度估計問題。",
+        "與基礎版本相比，進階模型加入更完整的多時區輸入、風險報酬控制與聰明錢特徵，讓策略能在不同市場條件下做出更細緻的判斷。",
+        "系統實作流程包含資料載入、特徵分析、策略選擇、人工智慧建議與交易配對檢視，形成可重複操作的五步驟工作空間。",
+        "總結來說，本專案成功把聰明錢概念量化為強化學習狀態，完成從資料、訓練到視覺化的端到端流程。未來可進一步導入更進階演算法、動態倉位控制與實盤測試。"
+      ];
+      starts.forEach((start, i) => {
+        const number = String(i + 1).padStart(2, "0");
+        const selector = `#slide-${number}`;
+        const direction = i % 2 === 0 ? -1 : 1;
+        const mode = i % 4;
+        const entrance = mode === 0
+          ? { opacity: 0, x: direction * 150, scale: 1.08, rotation: direction * 0.8 }
+          : mode === 1
+            ? { opacity: 0, y: 105, scale: 0.94, rotationX: 4 }
+            : mode === 2
+              ? { opacity: 0, scale: 1.16, filter: "blur(12px)" }
+              : { opacity: 0, x: direction * -80, y: -55, scale: 1.04, rotation: direction * -1.2 };
+        tl.from(selector, {
+          ...entrance,
+          duration: mode === 2 ? 0.85 : 0.62,
+          ease: mode === 0 ? "expo.out" : mode === 1 ? "back.out(1.25)" : mode === 2 ? "power3.out" : "circ.out",
+          overwrite: "auto",
+        }, start + 0.05);
+        tl.to(selector, {
+          x: mode === 1 ? direction * 24 : direction * -28,
+          y: mode === 3 ? 22 : -12,
+          scale: mode === 0 ? 1.045 : mode === 1 ? 1.025 : mode === 2 ? 1.055 : 1.035,
+          rotation: mode === 3 ? direction * 0.45 : direction * 0.12,
+          filter: "blur(0px)",
+          duration: audioDurations[i] + 0.25,
+          ease: mode === 0 ? "sine.inOut" : mode === 1 ? "power1.inOut" : mode === 2 ? "circ.inOut" : "power2.inOut",
+          overwrite: "auto",
+        }, start + 0.65);
+
+        tl.fromTo("#scan-line",
+          { opacity: 0, y: 80 },
+          { opacity: 0.65, y: 920, duration: 1.15, ease: "power2.inOut", overwrite: "auto" },
+          start + 0.28
+        );
+        tl.to("#scan-line", { opacity: 0, duration: 0.2, overwrite: "auto" }, start + 1.43);
+
+        focusPaths[i].forEach((point, pi) => {
+          const focusStart = start + 1.25 + pi * ((audioDurations[i] - 2.5) / focusPaths[i].length);
+          tl.fromTo("#focus-ring",
+            { opacity: 0, x: point[0] - 710, y: point[1] - 330, scale: point[2] * 0.7, rotation: direction * (pi % 2 === 0 ? -4 : 4) },
+            { opacity: 0.84, x: point[0] - 710, y: point[1] - 330, scale: point[2], rotation: 0, duration: 0.42, ease: pi % 2 === 0 ? "back.out(1.5)" : "expo.out", overwrite: "auto" },
+            focusStart
+          );
+          tl.to("#focus-ring", {
+            opacity: 0,
+            scale: point[2] * 1.1,
+            duration: 0.28,
+            ease: "power2.in",
+            overwrite: "auto",
+          }, focusStart + 1.05);
+        });
+
+        if (i > 0) {
+          if (i % 4 === 0 || i === 15) {
+            tl.fromTo("#energy-flash", { opacity: 0 }, { opacity: 0.72, duration: 0.12, ease: "power4.out", overwrite: "auto" }, start);
+            tl.to("#energy-flash", { opacity: 0, duration: 0.28, ease: "expo.in", overwrite: "auto" }, start + 0.12);
+          } else {
+            tl.fromTo(".transition-bar",
+              { opacity: 0.9, scaleX: 0, transformOrigin: direction > 0 ? "left center" : "right center" },
+              { opacity: 0.9, scaleX: 1, duration: 0.22, stagger: 0.035, ease: "power4.in", overwrite: "auto" },
+              start - 0.22
+            );
+            tl.to(".transition-bar", {
+              opacity: 0,
+              scaleX: 0,
+              transformOrigin: direction > 0 ? "right center" : "left center",
+              duration: 0.3,
+              stagger: 0.025,
+              ease: "expo.out",
+              overwrite: "auto",
+            }, start + 0.03);
+          }
+        }
+      });
+      tl.from("#hud", { opacity: 0, y: -32, duration: 0.7, ease: "expo.out" }, 0.2);
+      tl.to("#hud-progress", { scaleX: 1, duration: 204.1, ease: "none" }, 0.25);
+      tl.fromTo("#vignette", { opacity: 0.32, scale: 1 }, { opacity: 0.7, scale: 1.05, duration: 204, ease: "sine.inOut" }, 0.2);
+      narration.forEach((text, i) => {
+        const chunks = text.match(/[^，。；：]+[，。；：]?/g).filter(Boolean);
+        const totalChars = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
+        let cursor = starts[i] + 0.1;
+        chunks.forEach((chunk, ci) => {
+          const duration = audioDurations[i] * (chunk.length / totalChars);
+          const el = document.createElement("div");
+          el.id = `caption-${i}-${ci}`;
+          el.className = "caption";
+          el.textContent = chunk;
+          document.getElementById("root").appendChild(el);
+          tl.fromTo(el,
+            { opacity: 0, y: 34, scale: 0.94, rotationX: 8 },
+            { opacity: 1, y: 0, scale: 1, rotationX: 0, duration: 0.34, ease: ci % 2 === 0 ? "back.out(1.35)" : "expo.out", overwrite: "auto" },
+            cursor
+          );
+          tl.to(el, { scale: 1.018, duration: Math.max(0.3, duration - 0.5), ease: "sine.inOut", overwrite: "auto" }, cursor + 0.34);
+          tl.to(el, { opacity: 0, y: -16, scale: 0.96, duration: 0.18, ease: "power3.in", overwrite: "auto" }, cursor + duration - 0.18);
+          tl.set(el, { opacity: 0, visibility: "hidden" }, cursor + duration);
+          cursor += duration;
+        });
+      });
+      tl.to("#slide-16", { opacity: 0, duration: 0.6, ease: "power2.in" }, 203.916);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
