@@ -38,7 +38,20 @@ export async function exportHyperframesBundle(storyboard) {
     (slide.animations || []).forEach((anim, j) => {
       objectsHTML += `<div class="anim-obj" id="obj-${i}-${j}">${anim.target}</div>\n`;
       const absTime = startTime + anim.start_time;
-      jsTimelineStr += `tl.fromTo('#obj-${i}-${j}', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, ${absTime});\n`;
+      
+      const type = anim.type || 'slide_up';
+      if (type === 'fade') {
+        jsTimelineStr += `tl.fromTo('#obj-${i}-${j}', { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "power2.out" }, ${absTime});\n`;
+      } else if (type === 'pop') {
+        jsTimelineStr += `tl.fromTo('#obj-${i}-${j}', { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(2)" }, ${absTime});\n`;
+      } else if (type === 'slide_right') {
+        jsTimelineStr += `tl.fromTo('#obj-${i}-${j}', { opacity: 0, x: -50 }, { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" }, ${absTime});\n`;
+      } else if (type === 'none') {
+        jsTimelineStr += `tl.set('#obj-${i}-${j}', { opacity: 1 }, ${absTime});\n`;
+      } else {
+        // default slide_up
+        jsTimelineStr += `tl.fromTo('#obj-${i}-${j}', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, ${absTime});\n`;
+      }
     });
 
     scenesHTML += `<div id="scene-${i}" class="scene">\n${objectsHTML}</div>\n`;

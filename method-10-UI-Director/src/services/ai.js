@@ -98,3 +98,52 @@ Return ONLY valid JSON in this exact format:
   if (!textResult) throw new Error("API returned no valid text.");
   return JSON.parse(textResult);
 }
+
+export async function regenerateSlideStoryboard(imageBase64, currentSlideData, userFeedback) {
+  if (!API_KEY) throw new Error("API Key not set.");
+
+  const b64 = imageBase64.includes(',') ? imageBase64.split(',')[1] : imageBase64;
+
+  const prompt = `You are a master video director.
+I am providing you with an image of a single presentation slide, the current JSON storyboard data for this slide, and feedback from the user.
+Please adjust the storyboard JSON based on the user's feedback. You may modify the "tts_script", the "duration", or add/edit/remove objects in the "animations" array.
+
+User Feedback:
+"${userFeedback}"
+
+Current Storyboard JSON for this slide:
+${JSON.stringify(currentSlideData, null, 2)}
+
+Return ONLY valid JSON in this exact format:
+{
+  "slide_index": ${currentSlideData.slide_index},
+  "tts_script": "...",
+  "duration": 5.0,
+  "animations": [
+    { "target": "title text", "start_time": 0.5, "box_2d": [100, 100, 200, 900] }
+  ]
+}`;
+
+  const payload = {
+    contents: [{
+      parts: [
+        { text: prompt },
+        { inlineData: { mimeType: "image/png", data: b64 } }
+      ]
+    }],
+    generationConfig: {
+      temperature: 0.2,
+      responseMimeType: "application/json"
+    }
+  };
+
+  const data = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL_OCR}:generateContent?key=${API_KEY}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+
+  const textResult = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!textResult) throw new Error("API returned no valid text.");
+  return JSON.parse(textResult);
+}
