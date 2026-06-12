@@ -15,7 +15,7 @@ const MODEL_IMAGE = "gemini-2.5-flash-image";
 const wait = (ms) => new Promise(res => setTimeout(res, ms));
 
 async function fetchWithRetry(url, options, maxRetries = 4) {
-  const delays = [2000, 4000, 8000, 10000]; // Longer delays for high demand
+  const delays = [5000, 15000, 30000, 60000]; // Massive delays to survive 2 RPM free tier limits
   for (let i = 0; i < maxRetries; i++) {
     try {
       const response = await fetch(url, options);
@@ -47,14 +47,17 @@ async function fetchWithRetry(url, options, maxRetries = 4) {
 /**
  * Method 10: Generates a JSON Storyboard from a PDF File + Transcript
  */
-export async function generateStoryboard(pdfBase64, transcript) {
+export async function generateStoryboard(pdfData, transcript, isDebugMode = false) {
   if (!API_KEY) throw new Error("API Key not set");
 
-  const b64 = pdfBase64.includes(',') ? pdfBase64.split(',')[1] : pdfBase64;
+  const b64Parts = Array.isArray(pdfData) 
+    ? pdfData.map(b64 => ({ inlineData: { mimeType: "image/jpeg", data: b64.includes(',') ? b64.split(',')[1] : b64 } }))
+    : [{ inlineData: { mimeType: "application/pdf", data: pdfData.includes(',') ? pdfData.split(',')[1] : pdfData } }];
 
 const prompt = `You are a master video director.
 Analyze the provided PDF presentation and the user's transcript (逐字稿).
 Create a highly structured JSON storyboard.
+${isDebugMode ? "CRITICAL DEBUG OVERRIDE: YOU MUST ONLY PROCESS THE FIRST 3 SLIDES OF THIS PDF! DO NOT CREATE ANY JSON ENTRIES FOR SLIDES BEYOND SLIDE 3. STOP AFTER THE 3RD SLIDE." : ""}
 For each slide in the PDF, map out:
 1. The exact "tts_script" (the dialogue the AI voice will say).
 2. A list of "animations" for the objects on the slide, with "target" (description of the object) and "start_time" (in seconds relative to the slide start).
@@ -80,10 +83,59 @@ Return ONLY valid JSON in this exact format:
       parts: [
         { text: prompt },
         { text: "Transcript:\n" + transcript },
-        { inlineData: { mimeType: "application/pdf", data: b64 } }
+        ...b64Parts
       ]
     }],
     generationConfig: {
+      responseMimeType: "application/json"
+    }
+  };
+
+  const data = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL_OCR}:generateContent?key=${API_KEY}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+
+  const textResult = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!textResult) throw new Error("API returned no valid text.");
+  return JSON.parse(textResult);
+}
+
+export async function generateSingleSlideStoryboard(imageBase64, slideIndex, transcript) {
+  if (!API_KEY) throw new Error("API Key not set.");
+
+  const b64 = imageBase64.includes(',') ? imageBase64.split(',')[1] : imageBase64;
+
+  const prompt = `You are a master video director.
+Analyze the provided presentation slide image. If a transcript is provided, extract the dialogue specific to this slide.
+Create a highly structured JSON storyboard.
+Map out:
+1. The exact "tts_script" (the dialogue the AI voice will say).
+2. A list of "animations" for the objects on the slide, with "target" (description of the object) and "start_time" (in seconds relative to the slide start).
+3. For each animation, include a "box_2d" array [ymin, xmin, ymax, xmax] mapping the bounding box of the target object proportionally on a 0-1000 scale.
+
+Return ONLY valid JSON in this exact format:
+{
+  "slide_index": ${slideIndex},
+  "tts_script": "Welcome to A2Z...",
+  "duration": 5.0,
+  "animations": [
+    { "target": "title text", "start_time": 0.5, "box_2d": [100, 100, 200, 900] },
+    { "target": "first bullet point", "start_time": 2.0, "box_2d": [300, 100, 350, 900] }
+  ]
+}`;
+
+  const payload = {
+    contents: [{
+      parts: [
+        { text: prompt },
+        { text: "Global Transcript:\n" + transcript },
+        { inlineData: { mimeType: "image/jpeg", data: b64 } }
+      ]
+    }],
+    generationConfig: {
+      temperature: 0.2,
       responseMimeType: "application/json"
     }
   };

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { Upload, Download, Wand2, Loader2, Key, CheckCircle2, FileText, Settings2, Plus, Trash2, Move, Sparkles, Save, ChevronDown, ChevronUp } from 'lucide-react';
-import { getApiKey, setApiKey as saveApiKey, generateStoryboard, regenerateSlideStoryboard } from './services/ai';
+import { Upload, Download, Wand2, Loader2, Key, CheckCircle2, FileText, Settings2, Plus, Trash2, Move, Sparkles, Save, ChevronDown, ChevronUp, Play, Square } from 'lucide-react';
+import gsap from 'gsap';
+import { getApiKey, setApiKey as saveApiKey, generateStoryboard, regenerateSlideStoryboard, generateSingleSlideStoryboard } from './services/ai';
 import { exportHyperframesBundle } from './services/export';
 import { extractPdfPages } from './services/pdf';
 
@@ -93,10 +94,20 @@ function App() {
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfBase64, setPdfBase64] = useState(null);
   const [pdfPages, setPdfPages] = useState([]);
+  
+  const [bgPdfFile, setBgPdfFile] = useState(null);
+  const [bgPdfPages, setBgPdfPages] = useState([]);
+  
   const [transcript, setTranscript] = useState('');
+  const [isDebugMode, setIsDebugMode] = useState(false);
   
   const [isProcessing, setIsProcessing] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [isRegeneratingSlide, setIsRegeneratingSlide] = useState(false);
+  const [isBatchGenerating, setIsBatchGenerating] = useState(false);
+  const [batchProgress, setBatchProgress] = useState(0);
+  const [batchTotal, setBatchTotal] = useState(0);
+  
   const [aiFeedback, setAiFeedback] = useState('');
   const [storyboard, setStoryboard] = useState(null);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
@@ -104,6 +115,9 @@ function App() {
   
   const [isDirty, setIsDirty] = useState(false);
   const [expandedAnimIndex, setExpandedAnimIndex] = useState(null);
+  
+  const [isPreviewing, setIsPreviewing] = useState(false);
+  const previewTimelineRef = useRef(null);
   
   const canvasRef = useRef(null);
 
@@ -147,6 +161,20 @@ function App() {
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) processPdfFile(file);
+  };
+
+  const handleBgFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setBgPdfFile(file);
+      try {
+        const pages = await extractPdfPages(file);
+        setBgPdfPages(pages);
+      } catch (err) {
+        console.error("Failed to process Background PDF", err);
+        alert("Failed to read Background PDF file.");
+      }
+    }
   };
 
   const loadDefaultProject = async () => {
@@ -202,7 +230,7 @@ function App() {
     if (!apiKey) return alert("Please set Gemini API Key first.");
     if (!pdfBase64) return alert("Please upload a PDF first.");
     
-    const cacheKey = `storyboard_cache_${pdfFile.name}`;
+    const cacheKey = `storyboard_cache_${pdfFile.name}${isDebugMode ? '_debug' : ''}`;
     const cached = localStorage.getItem(cacheKey);
     if (cached) {
       if (window.confirm(`Found previously processed work for "${pdfFile.name}". Do you want to restore it instantly without calling AI?`)) {
@@ -212,15 +240,146 @@ function App() {
     }
 
     setIsProcessing(true);
+    setProgress(0);
+    
+    // Calculate a rough ETA based on page count
+    const pageCount = isDebugMode ? Math.min(3, pdfPages.length) : pdfPages.length;
+    const estimatedTimeMs = Math.max(10000, pageCount * 6000); 
+    const updateIntervalMs = 500;
+    const progressStep = (updateIntervalMs / estimatedTimeMs) * 100;
+    
+    const timer = setInterval(() => {
+      setProgress(p => {
+        // Cap fake progress at 99%, it only hits 100% when the promise resolves
+        const next = p + progressStep;
+        return next > 99 ? 99 : next;
+      });
+    }, updateIntervalMs);
+
     try {
-      const result = await generateStoryboard(pdfBase64, transcript);
-      setStoryboard(result);
+      const dataToSend = isDebugMode 
+        ? pdfPages.slice(0, 3).map(p => p.originalUrl) 
+        : pdfBase64;
+        
+      const result = await generateStoryboard(dataToSend, transcript, isDebugMode);
+      clearInterval(timer);
+      setProgress(100);
+      
+      // Brief pause to show 100% before transition
+      setTimeout(() => {
+        setActiveSlideIndex(0); // Prevent out of bounds if they previously selected a high index
+        
+        // Ensure slides array exists and handle various AI hallucinated JSON shapes
+        let cleanResult = result;
+        if (Array.isArray(result)) {
+           cleanResult = { slides: result };
+        } else if (!result.slides) {
+           result.slides = result.storyboard || result.slides_data || [];
+           cleanResult = result;
+        }
+        
+        setStoryboard(cleanResult);
+      }, 400);
     } catch (err) {
+      clearInterval(timer);
+      setProgress(0);
       console.error(err);
       alert("Failed to generate storyboard: " + err.message);
     } finally {
-      setIsProcessing(false);
+      setTimeout(() => setIsProcessing(false), 400);
     }
+  };
+
+  const handleSkipToEditor = () => {
+    if (!pdfPages || pdfPages.length === 0) return alert("Please upload a PDF first.");
+    
+    // Initialize empty storyboard
+    const emptyStoryboard = {
+      slides: pdfPages.map((page, i) => ({
+        slide_index: i + 1,
+        duration: 5,
+        tts_script: "",
+        animations: []
+      }))
+    };
+    
+    setActiveSlideIndex(0);
+    setStoryboard(emptyStoryboard);
+  };
+
+  const handleGenerateSingleSlide = async () => {
+    if (!apiKey) return alert("Please set Gemini API Key first.");
+    
+    const imageBase64 = pdfPages[activeSlideIndex].originalUrl;
+    setIsRegeneratingSlide(true);
+    
+    try {
+      const newSlideData = await generateSingleSlideStoryboard(imageBase64, activeSlideIndex + 1, transcript);
+      
+      setStoryboard(prev => {
+        const newStoryboard = { ...prev };
+        newStoryboard.slides[activeSlideIndex] = newSlideData;
+        return newStoryboard;
+      });
+      setIsDirty(true);
+      
+      // Auto-play preview after successful generation
+      setTimeout(() => {
+        document.getElementById('btn-preview-slide')?.click();
+      }, 500);
+      
+    } catch (err) {
+      console.error(err);
+      alert("Failed to generate slide: " + err.message);
+    } finally {
+      setIsRegeneratingSlide(false);
+    }
+  };
+
+  const handleBatchGenerateSlides = async () => {
+    if (!apiKey) return alert("Please set Gemini API Key first.");
+    if (!storyboard || !storyboard.slides) return;
+    
+    // Find all empty slides
+    const emptySlideIndices = storyboard.slides
+      .map((s, i) => (!s.animations || s.animations.length === 0) ? i : -1)
+      .filter(i => i !== -1);
+      
+    if (emptySlideIndices.length === 0) {
+      return alert("All slides already have animations!");
+    }
+    
+    if (!window.confirm(`This will auto-generate ${emptySlideIndices.length} blank slides one-by-one. This may take 5-10 minutes depending on API rate limits. Continue?`)) return;
+
+    setIsBatchGenerating(true);
+    setBatchTotal(emptySlideIndices.length);
+    setBatchProgress(0);
+    
+    let updatedStoryboard = { ...storyboard };
+    
+    for (let i = 0; i < emptySlideIndices.length; i++) {
+      const targetIndex = emptySlideIndices[i];
+      setActiveSlideIndex(targetIndex);
+      const imageBase64 = pdfPages[targetIndex].originalUrl;
+      
+      try {
+        const newSlideData = await generateSingleSlideStoryboard(imageBase64, targetIndex + 1, transcript);
+        updatedStoryboard.slides[targetIndex] = newSlideData;
+        setStoryboard({ ...updatedStoryboard });
+        setIsDirty(true);
+        setBatchProgress(i + 1);
+        
+        // Brief pause to ensure UI updates and slight API throttle
+        await new Promise(r => setTimeout(r, 1000));
+        
+      } catch (err) {
+        console.error("Batch error at slide", targetIndex + 1, err);
+        alert(`Batch generation failed at slide ${targetIndex + 1}: ${err.message}. Progress so far has been saved.`);
+        break;
+      }
+    }
+    
+    setIsBatchGenerating(false);
   };
 
   const handleRegenerateSlide = async () => {
@@ -287,9 +446,54 @@ function App() {
     setIsDirty(true);
   };
 
+  const handlePreviewSlide = () => {
+    if (!storyboard || !storyboard.slides[activeSlideIndex]) return;
+    setIsPreviewing(true);
+    
+    const animations = storyboard.slides[activeSlideIndex].animations || [];
+    
+    // Wait for React to render the static preview boxes instead of the interactive editors
+    setTimeout(() => {
+      const tl = gsap.timeline({ 
+        onComplete: () => setIsPreviewing(false) 
+      });
+      previewTimelineRef.current = tl;
+      
+      animations.forEach((anim, j) => {
+        const type = anim.type || 'slide_up';
+        const selector = `#preview-box-${j}`;
+        const start = anim.start_time || 0;
+        
+        // Hide initially before animation starts
+        gsap.set(selector, { opacity: 0 });
+        
+        if (type === 'fade') {
+          tl.fromTo(selector, { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "power2.out" }, start);
+        } else if (type === 'pop') {
+          tl.fromTo(selector, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(2)" }, start);
+        } else if (type === 'slide_right') {
+          tl.fromTo(selector, { opacity: 0, x: -50 }, { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" }, start);
+        } else if (type === 'none') {
+          tl.set(selector, { opacity: 1 }, start);
+        } else {
+          // default slide_up
+          tl.fromTo(selector, { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, start);
+        }
+      });
+    }, 50);
+  };
+
+  const handleStopPreview = () => {
+    if (previewTimelineRef.current) {
+      previewTimelineRef.current.kill();
+    }
+    setIsPreviewing(false);
+  };
+
   const hasInputs = !!pdfFile;
   const hasStoryboard = !!storyboard;
   const activePageSnapshotUrl = pdfPages[activeSlideIndex]?.originalUrl;
+  const activeBgSnapshotUrl = bgPdfPages[activeSlideIndex]?.originalUrl;
 
   return (
     <div className="h-screen flex flex-col bg-slate-50 text-slate-900 font-sans overflow-hidden">
@@ -346,7 +550,7 @@ function App() {
             <Save className="w-4 h-4" /> {isDirty ? "Save Changes" : "Saved"}
           </button>
           
-          <button onClick={() => exportHyperframesBundle(storyboard)} disabled={!hasStoryboard} className={`px-4 py-2 rounded-lg font-bold shadow-sm transition flex items-center gap-2 text-sm ${hasStoryboard ? 'bg-indigo-600 hover:bg-indigo-700 text-white' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}>
+          <button onClick={() => exportHyperframesBundle(storyboard, pdfPages, bgPdfPages)} disabled={!hasStoryboard} className={`px-4 py-2 rounded-lg font-bold shadow-sm transition flex items-center gap-2 text-sm ${hasStoryboard ? 'bg-indigo-600 hover:bg-indigo-700 text-white' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}>
             <Download className="w-4 h-4" /> Export Video Bundle
           </button>
         </div>
@@ -363,13 +567,23 @@ function App() {
               <div className="flex-1 max-w-2xl border-r border-slate-200 bg-white p-8 overflow-y-auto shrink-0 shadow-sm z-10">
                  <h2 className="text-2xl font-black mb-6">Step 1: Upload Materials</h2>
                  
-                 <div className="mb-6">
-                    <label className="block text-sm font-bold text-slate-700 mb-2">Presentation PDF</label>
-                    <label className="border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-slate-100 rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition">
-                      <Upload className="w-8 h-8 text-slate-400 mb-2" />
-                      <span className="font-bold text-slate-600">{pdfFile ? pdfFile.name : "Click to select PDF"}</span>
-                      <input type="file" accept="application/pdf" className="hidden" onChange={handleFileUpload} />
-                    </label>
+                 <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                      <label className="block text-sm font-bold text-slate-700 mb-2">Foreground Slides (PDF)</label>
+                      <label className="border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-slate-100 rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer transition text-center">
+                        <Upload className="w-6 h-6 text-slate-400 mb-2" />
+                        <span className="font-bold text-slate-600 text-sm leading-tight">{pdfFile ? pdfFile.name : "Click to select"}</span>
+                        <input type="file" accept="application/pdf" className="hidden" onChange={handleFileUpload} />
+                      </label>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-slate-700 mb-2">Backgrounds (Optional)</label>
+                      <label className="border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-slate-100 rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer transition text-center">
+                        <Upload className="w-6 h-6 text-slate-400 mb-2" />
+                        <span className="font-bold text-slate-600 text-sm leading-tight">{bgPdfFile ? bgPdfFile.name : "Select PDF bg"}</span>
+                        <input type="file" accept="application/pdf" className="hidden" onChange={handleBgFileUpload} />
+                      </label>
+                    </div>
                  </div>
 
                  <div className="mb-8">
@@ -394,13 +608,46 @@ function App() {
                       </button>
                     )}
 
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <input type="checkbox" id="debugMode" className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" checked={isDebugMode} onChange={(e) => setIsDebugMode(e.target.checked)} />
+                        <label htmlFor="debugMode" className="text-sm font-bold text-slate-700 select-none">Debug Mode (Process First 3 Pages Only)</label>
+                      </div>
+                    </div>
                     <button 
-                      onClick={handleGenerate}
-                      disabled={!pdfFile || isProcessing}
-                      className={`w-full py-4 rounded-xl font-black text-lg flex items-center justify-center gap-3 transition shadow-lg ${(!pdfFile || isProcessing) ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 text-white hover:scale-[1.02]'}`}
+                      onClick={() => handleGenerate(isDebugMode)}
+                      disabled={!hasInputs || isProcessing}
+                      className={`w-full relative overflow-hidden py-4 rounded-xl font-black text-lg shadow-lg flex items-center justify-center gap-3 transition-all ${!hasInputs ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 text-white hover:shadow-indigo-500/25 hover:-translate-y-0.5'}`}
                     >
-                      {isProcessing ? <Loader2 className="w-6 h-6 animate-spin" /> : <Wand2 className="w-6 h-6" />}
-                      {isProcessing ? "AI is generating storyboard..." : "Auto-Generate Storyboard"}
+                      {/* Progress Bar Fill */}
+                      {isProcessing && (
+                        <div 
+                          className="absolute left-0 top-0 bottom-0 bg-indigo-500/50 transition-all duration-500" 
+                          style={{ width: `${progress}%` }}
+                        />
+                      )}
+                      
+                      <div className="relative z-10 flex items-center gap-3 w-full px-6">
+                        <div className="flex items-center gap-3 justify-center flex-1">
+                          {isProcessing ? <Loader2 className="w-6 h-6 animate-spin" /> : <Wand2 className="w-6 h-6" />}
+                          {isProcessing ? "AI is generating storyboard..." : "Auto-Generate Storyboard"}
+                        </div>
+                        
+                        {/* Progress Text on the right side */}
+                        {isProcessing && (
+                          <div className="text-right font-mono text-sm tracking-widest text-indigo-100 shrink-0 min-w-[3rem]">
+                            {Math.round(progress)}%
+                          </div>
+                        )}
+                      </div>
+                    </button>
+                    
+                    <button 
+                      onClick={handleSkipToEditor}
+                      disabled={!hasInputs || isProcessing}
+                      className={`w-full mt-3 py-3 rounded-xl font-bold text-sm shadow-sm flex items-center justify-center gap-2 transition-all ${!hasInputs ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-slate-200 hover:bg-slate-300 text-slate-700'}`}
+                    >
+                      Skip & Process Individually
                     </button>
                  </div>
               </div>
@@ -487,25 +734,73 @@ function App() {
                  <div className="w-full bg-slate-900 border-b border-slate-800 p-8 flex items-center justify-center shrink-0">
                     {/* Tight wrapper around the image so overlays scale perfectly. Using inline-block prevents flex intrinsic width bugs. */}
                     <div ref={canvasRef} className="relative shadow-2xl rounded-xl border border-slate-700 inline-block max-h-[50vh] max-w-full">
+                       {/* Base Image: If previewing and a background is available, show the background. Otherwise show the foreground. */}
                        <img 
-                         src={activePageSnapshotUrl} 
+                         src={isPreviewing && activeBgSnapshotUrl ? activeBgSnapshotUrl : activePageSnapshotUrl} 
                          alt="Slide Snapshot" 
-                         className="max-h-[50vh] max-w-full block select-none pointer-events-none rounded-xl" 
+                         className={`max-h-[50vh] max-w-full block select-none pointer-events-none rounded-xl ${!isPreviewing && !activeBgSnapshotUrl ? '' : ''}`} 
                        />
                        
                        {/* Overlay Container */}
                        <div className="absolute inset-0 pointer-events-none rounded-xl overflow-hidden">
-                         {(storyboard.slides[activeSlideIndex].animations || []).map((anim, j) => {
-                           return (
-                             <BoxEditor 
-                               key={j}
-                               box2d={anim.box_2d}
-                               index={j + 1}
-                               containerRef={canvasRef}
-                               onUpdate={(newBox) => handleUpdateAnimation(activeSlideIndex, j, 'box_2d', newBox)}
-                             />
-                           );
-                         })}
+                         {isPreviewing ? (
+                           /* Render composited cropped boxes for GSAP to animate */
+                           (storyboard.slides[activeSlideIndex]?.animations || []).map((anim, j) => {
+                             const [ymin, xmin, ymax, xmax] = anim.box_2d || [0,0,0,0];
+                             const w_pct = (xmax - xmin) / 10;
+                             const h_pct = (ymax - ymin) / 10;
+                             const left_pct = xmin / 10;
+                             const top_pct = ymin / 10;
+                             
+                             return (
+                               <div 
+                                 key={`preview-${j}`}
+                                 id={`preview-box-${j}`}
+                                 className="absolute overflow-hidden shadow-2xl opacity-0"
+                                 style={{ top: `${top_pct}%`, left: `${left_pct}%`, width: `${w_pct}%`, height: `${h_pct}%` }}
+                               >
+                                  {/* Cropped Foreground Pixels */}
+                                  <img 
+                                     src={activePageSnapshotUrl}
+                                     className="max-w-none block"
+                                     style={{ 
+                                       position: 'absolute',
+                                       width: `${100 / (w_pct / 100)}%`, 
+                                       height: `${100 / (h_pct / 100)}%`,
+                                       left: `-${left_pct / (w_pct / 100)}%`,
+                                       top: `-${top_pct / (h_pct / 100)}%`
+                                     }}
+                                  />
+                               </div>
+                             )
+                           })
+                         ) : (
+                           /* Render interactive box editors when not previewing */
+                           (storyboard.slides[activeSlideIndex]?.animations || []).map((anim, j) => {
+                             return (
+                               <BoxEditor 
+                                 key={j}
+                                 box2d={anim.box_2d}
+                                 index={j + 1}
+                                 containerRef={canvasRef}
+                                 onUpdate={(newBox) => handleUpdateAnimation(activeSlideIndex, j, 'box_2d', newBox)}
+                               />
+                             )
+                           })
+                         )}
+                       </div>
+                       
+                       {/* Preview Controls */}
+                       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur border border-slate-700 p-2 rounded-xl shadow-2xl flex items-center gap-4 pointer-events-auto">
+                         {isPreviewing ? (
+                           <button onClick={handleStopPreview} className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-bold text-sm transition">
+                             <Square className="w-4 h-4 fill-current"/> Stop Preview
+                           </button>
+                         ) : (
+                           <button id="btn-preview-slide" onClick={handlePreviewSlide} className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold text-sm transition">
+                             <Play className="w-4 h-4 fill-current"/> Preview Slide
+                           </button>
+                         )}
                        </div>
                     </div>
                  </div>
@@ -514,33 +809,61 @@ function App() {
                <div className="p-8 max-w-4xl mx-auto space-y-8 w-full flex-1">
                   
                   {/* AI Feedback / Regeneration Block */}
-                  <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-1 rounded-2xl shadow-sm">
-                    <div className="bg-white p-6 rounded-xl flex items-center gap-4">
-                      <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center shrink-0">
-                        <Sparkles className="w-6 h-6 text-indigo-600" />
+                  <div className="bg-indigo-50/50 p-6 rounded-2xl border border-indigo-100 flex flex-col items-center relative overflow-hidden">
+                    
+                    {/* Batch Progress Bar overlay */}
+                    {isBatchGenerating && (
+                      <div className="absolute inset-0 bg-indigo-900/80 backdrop-blur-sm z-20 flex flex-col items-center justify-center p-6 text-white text-center">
+                        <Loader2 className="w-12 h-12 animate-spin mb-4 text-indigo-300"/>
+                        <h3 className="text-lg font-black mb-2">Batch Generating Slides</h3>
+                        <p className="font-medium text-indigo-200 mb-4">Slide {batchProgress} of {batchTotal}</p>
+                        <div className="w-full bg-indigo-950 rounded-full h-3 overflow-hidden">
+                          <div className="bg-indigo-400 h-full transition-all duration-500" style={{width: `${(batchProgress / batchTotal) * 100}%`}}></div>
+                        </div>
+                        <p className="text-xs text-indigo-300 mt-4 opacity-70 max-w-xs">Waiting between requests automatically to respect API limits...</p>
                       </div>
-                      <div className="flex-1">
-                         <h3 className="font-black text-slate-800 mb-1">Human-in-the-Loop Feedback</h3>
-                         <p className="text-xs font-bold text-slate-400 mb-3">Tell the AI to adjust the narration script, edit bounding boxes, or add new animations for this specific slide.</p>
-                         <div className="flex gap-3">
-                           <input 
-                             type="text" 
-                             value={aiFeedback}
-                             onChange={(e) => setAiFeedback(e.target.value)}
-                             onKeyDown={(e) => e.key === 'Enter' && handleRegenerateSlide()}
-                             placeholder="e.g., 'Make the narration sound more excited' or 'Also animate the logo in the top right'"
-                             className="flex-1 border-2 border-slate-200 rounded-lg px-4 py-2 text-sm focus:border-indigo-500 outline-none font-medium"
-                           />
-                           <button 
-                             onClick={handleRegenerateSlide}
-                             disabled={isRegeneratingSlide || !aiFeedback.trim()}
-                             className={`px-6 py-2 rounded-lg font-bold flex items-center gap-2 transition shadow-sm ${isRegeneratingSlide || !aiFeedback.trim() ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 text-white'}`}
-                           >
-                             {isRegeneratingSlide ? <Loader2 className="w-4 h-4 animate-spin"/> : <Wand2 className="w-4 h-4"/>}
-                             {isRegeneratingSlide ? 'Regenerating...' : 'Regenerate Slide'}
-                           </button>
-                         </div>
-                      </div>
+                    )}
+
+                    <div className="flex gap-4 w-full">
+                       <button 
+                         onClick={handleGenerateSingleSlide} 
+                         disabled={isRegeneratingSlide}
+                         className="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-black py-3 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+                       >
+                         {isRegeneratingSlide ? <Loader2 className="w-5 h-5 animate-spin"/> : <Wand2 className="w-5 h-5"/>}
+                         Auto-Generate This Slide
+                       </button>
+                       <button 
+                         onClick={handleBatchGenerateSlides} 
+                         className="flex-1 bg-white hover:bg-slate-50 border-2 border-indigo-200 hover:border-indigo-300 text-indigo-700 font-black py-3 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2"
+                       >
+                         <Sparkles className="w-5 h-5"/>
+                         Batch Generate All Blank
+                       </button>
+                    </div>
+                    
+                    <div className="w-full flex items-center gap-4 my-6">
+                      <div className="h-px bg-indigo-200 flex-1"></div>
+                      <span className="text-xs font-black text-indigo-400 uppercase tracking-widest">OR Tweak with Text</span>
+                      <div className="h-px bg-indigo-200 flex-1"></div>
+                    </div>
+                    
+                    <div className="flex gap-3 w-full">
+                       <input 
+                         type="text" 
+                         className="flex-1 border border-indigo-200 rounded-xl px-4 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 font-medium text-sm text-slate-700"
+                         placeholder="E.g. 'Make the title slide in from the right...'"
+                         value={aiFeedback}
+                         onChange={(e) => setAiFeedback(e.target.value)}
+                         onKeyDown={(e) => e.key === 'Enter' && handleRegenerateSlide()}
+                       />
+                       <button 
+                         onClick={handleRegenerateSlide} 
+                         disabled={isRegeneratingSlide || !aiFeedback.trim()}
+                         className="bg-slate-900 hover:bg-slate-800 disabled:bg-slate-300 text-white font-bold px-6 rounded-xl transition flex items-center gap-2"
+                       >
+                         {isRegeneratingSlide ? <Loader2 className="w-4 h-4 animate-spin"/> : "Update"}
+                       </button>
                     </div>
                   </div>
 
@@ -558,7 +881,7 @@ function App() {
                        <input 
                          type="number" 
                          className="border-2 border-slate-200 rounded-lg px-3 py-2 text-sm w-32"
-                         value={storyboard.slides[activeSlideIndex].duration || 5}
+                         value={storyboard.slides[activeSlideIndex]?.duration || 5}
                          onChange={(e) => handleUpdateSlide(activeSlideIndex, 'duration', parseFloat(e.target.value))}
                        />
                     </div>
@@ -574,7 +897,7 @@ function App() {
                     </div>
 
                     <div className="space-y-3">
-                      {(storyboard.slides[activeSlideIndex].animations || []).map((anim, j) => (
+                      {(storyboard.slides[activeSlideIndex]?.animations || []).map((anim, j) => (
                          <div key={j} className="bg-slate-50 rounded-xl border border-slate-200 overflow-hidden shadow-sm">
                            <div className="flex items-center gap-3 p-3">
                               <div className="w-10 h-10 rounded-full bg-indigo-600 text-white font-black flex items-center justify-center shrink-0 shadow-md">
@@ -633,7 +956,7 @@ function App() {
                            )}
                          </div>
                       ))}
-                      {(!storyboard.slides[activeSlideIndex].animations || storyboard.slides[activeSlideIndex].animations.length === 0) && (
+                      {(!storyboard.slides[activeSlideIndex]?.animations || storyboard.slides[activeSlideIndex].animations.length === 0) && (
                         <div className="text-center p-8 text-slate-400 font-bold border-2 border-dashed border-slate-200 rounded-xl">
                           No animations scheduled for this slide.
                         </div>
