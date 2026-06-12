@@ -1,0 +1,8 @@
+{
+  "name": "pptx-render",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "render": "npx --yes hyperframes@latest render"
+  }
+}

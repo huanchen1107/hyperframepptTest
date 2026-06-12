@@ -1,0 +1,459 @@
+{
+  "slides": [
+    {
+      "slide_index": 1,
+      "tts_script": "大家好！今天我們的主題是「學術論文寫作全指南」。這不是一堂教你怎麼寫作的課，這是一堂教你怎麼把論文「編譯」成功的課。我們將介紹一套從 A 到 Z 的完美架構，幫助你建立專屬的「學術作業系統」。",
+      "duration": 20.0,
+      "animations": [
+        {
+          "target": "main content window frame",
+          "start_time": 0.0
+        },
+        {
+          "target": "main title text '學術論文寫作全指南'",
+          "start_time": 1.0
+        },
+        {
+          "target": "subtitle text '從A到Z的完美架構與 Debug 偵錯實務'",
+          "start_time": 2.0
+        },
+        {
+          "target": "yellow comment box '論文寫作不是藝術...'",
+          "start_time": 8.0
+        },
+        {
+          "target": "progress bar '[SYSTEM INITIALIZING: A-Z FRAMEWORK...]'",
+          "start_time": 12.0
+        }
+      ]
+    },
+    {
+      "slide_index": 2,
+      "tts_script": "為什麼論文總是被拒絕？在審稿人眼中，這其實就是「編譯失敗」。傳統的寫作方法常常導致滿桌的退稿。但如果我們換個角度，用工程師 Debug 的思維來看待論文呢？這就是我們的 A-Z 框架。",
+      "duration": 25.0,
+      "animations": [
+        {
+          "target": "question title '為什麼你的論文會被拒絕?'",
+          "start_time": 0.5
+        },
+        {
+          "target": "pile of rejected papers (left side)",
+          "start_time": 2.0
+        },
+        {
+          "target": "red 'REJECTED' stamp on papers",
+          "start_time": 4.0
+        },
+        {
+          "target": "diagnostic terminal frame (right side)",
+          "start_time": 8.0
+        },
+        {
+          "target": "Error 404 message in terminal",
+          "start_time": 10.0
+        },
+        {
+          "target": "Syntax Error message in terminal",
+          "start_time": 12.0
+        },
+        {
+          "target": "Warning message in terminal",
+          "start_time": 14.0
+        },
+        {
+          "target": "solution box at bottom '解決方案: 套用 A-Z 架構...'",
+          "start_time": 18.0
+        }
+      ]
+    },
+    {
+      "slide_index": 3,
+      "tts_script": "我們的系統架構包含六大核心編譯模組。模組 1 是摘要與動機，模組 2 是簡介，接著模組 3 是相關研究，模組 4 是你提出的方法與系統，這也是核心引擎。模組 5 是模擬與實驗的壓力測試，最後模組 6 是結論。這 26 個字母，就是我們成功發表的密碼。",
+      "duration": 30.0,
+      "animations": [
+        {
+          "target": "title 'System Architecture: 六大核心編譯模組'",
+          "start_time": 0.5
+        },
+        {
+          "target": "main flow diagram lines",
+          "start_time": 2.0
+        },
+        {
+          "target": "Module 1 box '[A-F] 摘要與動機'",
+          "start_time": 4.0
+        },
+        {
+          "target": "Module 2 box '[G-L] 簡介'",
+          "start_time": 7.0
+        },
+        {
+          "target": "Module 3 box '[M-O] 相關研究'",
+          "start_time": 10.0
+        },
+        {
+          "target": "Module 4 box '[PA-PM] 提出方法與系統'",
+          "start_time": 13.0
+        },
+        {
+          "target": "highlight of Module 4 as 'The Core Engine'",
+          "start_time": 14.0
+        },
+        {
+          "target": "Module 5 box '[Q-V] 模擬與實驗'",
+          "start_time": 17.0
+        },
+        {
+          "target": "Module 6 box '[W-Z] 結論與未來'",
+          "start_time": 20.0
+        },
+        {
+          "target": "code comment box at bottom",
+          "start_time": 24.0
+        }
+      ]
+    },
+    {
+      "slide_index": 4,
+      "tts_script": "我們先看模組 1。A 代表 Attention Getter，也就是你的研究要夠吸引人。B 是 But，也就是現有方法的缺陷。C 是 Cure，你提出的解藥。接著 D 是開發，E 是實驗，F 是你的主要發現。在 Debug 模式下，你必須檢查 C 和 B 是否有對應關係。",
+      "duration": 35.0,
+      "animations": [
+        {
+          "target": "title '[Module 1] The Hook Engine: 摘要與動機 (Abstract)'",
+          "start_time": 0.5
+        },
+        {
+          "target": "A-F flow chart frame",
+          "start_time": 2.0
+        },
+        {
+          "target": "A (Attention Getter) block and description",
+          "start_time": 3.0
+        },
+        {
+          "target": "B (But) block and description",
+          "start_time": 7.0
+        },
+        {
+          "target": "C (Cure) block and description",
+          "start_time": 11.0
+        },
+        {
+          "target": "D (Development) block and description",
+          "start_time": 15.0
+        },
+        {
+          "target": "E (Experiments) block and description",
+          "start_time": 19.0
+        },
+        {
+          "target": "F (Findings) block and description",
+          "start_time": 23.0
+        },
+        {
+          "target": "yellow 'Debug Mode Alert' box",
+          "start_time": 27.0
+        }
+      ]
+    },
+    {
+      "slide_index": 5,
+      "tts_script": "模組 2 是簡介。我們從 B 延伸出 G，介紹大環境趨勢。然後 H 指出具體挑戰，I 列出文獻，J 是你的批判。最後 K 點出你的貢獻，L 給出論文架構。千萬記得 L 必須要能清楚引導讀者。",
+      "duration": 35.0,
+      "animations": [
+        {
+          "target": "title '[Module 2] Background Process: 簡介 (Introduction)'",
+          "start_time": 0.5
+        },
+        {
+          "target": "B node and [A-F] folder",
+          "start_time": 2.0
+        },
+        {
+          "target": "G (General) box and connecting arrow",
+          "start_time": 4.0
+        },
+        {
+          "target": "H (However) box and connecting arrow",
+          "start_time": 8.0
+        },
+        {
+          "target": "I (In Literatur) box and connecting arrow",
+          "start_time": 12.0
+        },
+        {
+          "target": "J (Judgement) box and connecting arrow",
+          "start_time": 16.0
+        },
+        {
+          "target": "K (Keypoint) box and connecting arrow",
+          "start_time": 20.0
+        },
+        {
+          "target": "L (List) box and connecting arrow",
+          "start_time": 24.0
+        },
+        {
+          "target": "yellow 'Debug Mode Alert' box",
+          "start_time": 28.0
+        }
+      ]
+    },
+    {
+      "slide_index": 6,
+      "tts_script": "模組 3 相關研究。M 是歸納過去的方法，N 是帶出你提出的新方法，並指出新趨勢。O 則是將這些資訊整理成圖表。記住，這裡不要只是條列，而是要進行批判與比較。",
+      "duration": 25.0,
+      "animations": [
+        {
+          "target": "title '[Module 3] The Battleground: 相關研究 (Related Work)'",
+          "start_time": 0.5
+        },
+        {
+          "target": "M (Methods) box and its content",
+          "start_time": 2.0
+        },
+        {
+          "target": "N (New Proposed) box and connecting arrow and its content",
+          "start_time": 6.0
+        },
+        {
+          "target": "O (Organize) box and connecting arrow and its content",
+          "start_time": 12.0
+        },
+        {
+          "target": "callout bubble '不要只是「列舉」論文...'",
+          "start_time": 16.0
+        }
+      ]
+    },
+    {
+      "slide_index": 7,
+      "tts_script": "這是我們最推薦的 O 模組儀表板。利用這張表格，你可以清楚展示你的方法 N 在各個指標上是如何完勝舊方法 A、B 和 C 的。這就是最有效的 SWOT 分析！",
+      "duration": 25.0,
+      "animations": [
+        {
+          "target": "title '[Diagnostic View] The O-Organize Dashboard'",
+          "start_time": 0.5
+        },
+        {
+          "target": "comparison table frame and header",
+          "start_time": 2.0
+        },
+        {
+          "target": "Method A, Method B, Method C rows with X's and O's",
+          "start_time": 4.0
+        },
+        {
+          "target": "Proposed Scheme - N row with all O's",
+          "start_time": 8.0
+        },
+        {
+          "target": "highlight of 'Proposed Scheme - N' row",
+          "start_time": 10.0
+        },
+        {
+          "target": "'偵錯實務' box at bottom",
+          "start_time": 15.0
+        }
+      ]
+    },
+    {
+      "slide_index": 8,
+      "tts_script": "模組 4 進入核心架構。從意圖、設計、機制到證明。我們必須確保架構圖 PG、實作細節 PI 以及數學證明 PM 這三者完全連貫。",
+      "duration": 25.0,
+      "animations": [
+        {
+          "target": "title '[Module 4] The Core Architecture: 提出方法與系統 (Proposed Scheme)'",
+          "start_time": 0.5
+        },
+        {
+          "target": "central 'Proposed Scheme Engine' box",
+          "start_time": 2.0
+        },
+        {
+          "target": "'Intent' box with sub-bullets PA, PB, PC",
+          "start_time": 4.0
+        },
+        {
+          "target": "'Design' box with sub-bullets PD, PE, PF",
+          "start_time": 7.0
+        },
+        {
+          "target": "'Mechanics' box with sub-bullets PG, PH, PI",
+          "start_time": 10.0
+        },
+        {
+          "target": "'Proof' box with sub-bullets PJ, PK, PL, PM",
+          "start_time": 13.0
+        },
+        {
+          "target": "highlight of PG, PI, and PM elements",
+          "start_time": 17.0
+        }
+      ]
+    },
+    {
+      "slide_index": 9,
+      "tts_script": "在 Debug 模式中，我們進行雙重掃描。掃描 1 檢查架構圖和實作是否吻合。掃描 2 檢查數學證明是否支持實作。如果出現「圖文不符」的 Fatal Error，論文絕對會被拒。",
+      "duration": 30.0,
+      "animations": [
+        {
+          "target": "title '[Debugger Mode] 系統架構的連貫性偵錯'",
+          "start_time": 0.5
+        },
+        {
+          "target": "triangle diagram with PG, PI, PM nodes",
+          "start_time": 2.0
+        },
+        {
+          "target": "'Scan 1' box appears",
+          "start_time": 6.0
+        },
+        {
+          "target": "checkmark on PG-PI edge of the triangle",
+          "start_time": 7.0
+        },
+        {
+          "target": "'Scan 2' box appears",
+          "start_time": 12.0
+        },
+        {
+          "target": "checkmark on PI-PM edge of the triangle",
+          "start_time": 13.0
+        },
+        {
+          "target": "'Fatal Error' red box",
+          "start_time": 18.0
+        }
+      ]
+    },
+    {
+      "slide_index": 10,
+      "tts_script": "模組 5 壓力測試。我們不僅需要定性指標來展現方法的優勢，也需要定量指標的具體數據。同時，我們必須與 SOTA 也就是最先進的技術進行比較，並詳述實驗設定。",
+      "duration": 28.0,
+      "animations": [
+        {
+          "target": "title '[Module 5] The Stress Test: 模擬與實驗 (Q-V)'",
+          "start_time": 0.5
+        },
+        {
+          "target": "'定性指標 (Quality)' box with gauge",
+          "start_time": 2.0
+        },
+        {
+          "target": "'定量指標 (Quantity)' box with bar chart",
+          "start_time": 6.0
+        },
+        {
+          "target": "R (Related) box at bottom",
+          "start_time": 12.0
+        },
+        {
+          "target": "arrow from R to S/T",
+          "start_time": 14.0
+        },
+        {
+          "target": "S/T (Setup & Tuning) box",
+          "start_time": 15.0
+        },
+        {
+          "target": "arrow from S/T to U/V",
+          "start_time": 17.0
+        },
+        {
+          "target": "U/V (Useful & Verify) box",
+          "start_time": 18.0
+        }
+      ]
+    },
+    {
+      "slide_index": 11,
+      "tts_script": "最後模組 6 結論。我們從 W 回顧我們提出了什麼，X 強調我們在哪裡表現最優異，Y 展示具體數據，最後 Z 總結貢獻並給出未來展望。最重要的是，你的 Z 必須呼應一開始的 A。",
+      "duration": 32.0,
+      "animations": [
+        {
+          "target": "title '[Module 6] The Output Log: 結論與未來工作 (W-Z)'",
+          "start_time": 0.5
+        },
+        {
+          "target": "A (Attention Getter) box",
+          "start_time": 2.0
+        },
+        {
+          "target": "W (What Proposed) box and connecting arrow",
+          "start_time": 5.0
+        },
+        {
+          "target": "X (eXcel) box and connecting arrow",
+          "start_time": 9.0
+        },
+        {
+          "target": "Y (Yields) box and connecting arrow",
+          "start_time": 13.0
+        },
+        {
+          "target": "Z (Zen) box and connecting arrow",
+          "start_time": 17.0
+        },
+        {
+          "target": "dashed arrow from Z back to A",
+          "start_time": 22.0
+        },
+        {
+          "target": "yellow 'Debug Mode Alert' box",
+          "start_time": 24.0
+        }
+      ]
+    },
+    {
+      "slide_index": 12,
+      "tts_script": "這就是我們完整的 A-Z 偵錯清單。在投稿前，請務必逐一檢查這 26 個節點是否都亮起綠燈。",
+      "duration": 18.0,
+      "animations": [
+        {
+          "target": "title '[Full System Synthesis] A-Z 偵錯清單'",
+          "start_time": 0.5
+        },
+        {
+          "target": "main checklist table with green checkmarks",
+          "start_time": 2.0
+        },
+        {
+          "target": "bottom instruction box '送出論文 (Submit) 前的最後掃描...'",
+          "start_time": 8.0
+        }
+      ]
+    },
+    {
+      "slide_index": 13,
+      "tts_script": "當所有測試都通過，恭喜你，0 個語法錯誤，0 個邏輯漏洞。你的論文編譯成功，準備好迎接審稿委員的挑戰了！",
+      "duration": 20.0,
+      "animations": [
+        {
+          "target": "console line '> Running A-Z Diagnostic Scan...'",
+          "start_time": 0.5
+        },
+        {
+          "target": "console line '> 0 Syntax Errors Found.'",
+          "start_time": 2.0
+        },
+        {
+          "target": "console line '> 0 Logic Gaps Detected.'",
+          "start_time": 4.0
+        },
+        {
+          "target": "progress bar filling to 100%",
+          "start_time": 6.0
+        },
+        {
+          "target": "large text 'COMPILATION SUCCESSFUL.'",
+          "start_time": 10.0
+        },
+        {
+          "target": "bottom text '你的系統已準備就緒,迎接審稿委員的挑戰。'",
+          "start_time": 14.0
+        }
+      ]
+    }
+  ]
+}

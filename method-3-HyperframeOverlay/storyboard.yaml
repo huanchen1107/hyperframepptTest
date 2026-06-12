@@ -1,0 +1,37 @@
+project: pdf2video-transcript-analysis
+scenes:
+- id: scene_001
+  title: 'Chapter 1: Introduction'
+  video_start: 0.0
+  video_duration: 20.0
+  event_timestamp: 10.0
+  text_card: '【重點 1】 Introduction: Today we''re going to...'
+  output_video: clip_001.mp4
+- id: scene_002
+  title: 'Chapter 2: Setup'
+  video_start: 20.0
+  video_duration: 15.0
+  event_timestamp: 0.0
+  text_card: '【重點 2】 Setup: Before we begin, let...'
+  output_video: clip_002.mp4
+- id: scene_003
+  title: 'Chapter 3: Core Concepts'
+  video_start: 35.0
+  video_duration: 30.0
+  event_timestamp: 0.0
+  text_card: '【重點 3】 Core Concepts: OpenSpec solves the ...'
+  output_video: clip_003.mp4
+- id: scene_004
+  title: 'Chapter 4: Methodology'
+  video_start: 65.0
+  video_duration: 35.0
+  event_timestamp: 15.0
+  text_card: '【重點 4】 Methodology: The third method com...'
+  output_video: clip_004.mp4
+- id: scene_005
+  title: 'Chapter 5: Conclusion'
+  video_start: 100.0
+  video_duration: 20.0
+  event_timestamp: 0.0
+  text_card: '【重點 5】 Conclusion: This concludes our l...'
+  output_video: clip_005.mp4

@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <style>
+        * { box-sizing: border-box; }
+        html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #fffdf6; color: #1b1b1f; font-family: sans-serif; }
+        .root { position: relative; width: 1920px; height: 1080px; }
+        .scene { position: absolute; inset: 0; background-color: #fffdf6; opacity: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px; }
+        .anim-obj { font-size: 48px; font-weight: bold; margin: 20px 0; padding: 20px; border-radius: 12px; background: #e2e8f0; text-align: center; width: 100%; opacity: 0; }
+        .caption { position: absolute; bottom: 50px; left: 100px; right: 100px; font-size: 40px; font-weight: 900; color: white; -webkit-text-stroke: 2px black; text-align: center; opacity: 0; z-index: 10; }
+    </style>
+</head>
+<body>
+  <div id="root" class="root" data-composition-id="main" data-start="0" data-duration="348" data-width="1920" data-height="1080">
+    <div id="scene-0" class="scene">
+<div class="caption" id="caption-0">大家好！今天我們的主題是「學術論文寫作全指南」。這不是一堂教你怎麼寫作的課，這是一堂教你怎麼把論文「編譯」成功的課。我們將介紹一套從 A 到 Z 的完美架構，幫助你建立專屬的「學術作業系統」。</div>
+<div class="anim-obj" id="obj-0-0">main content window frame</div>
+<div class="anim-obj" id="obj-0-1">main title text '學術論文寫作全指南'</div>
+<div class="anim-obj" id="obj-0-2">subtitle text '從A到Z的完美架構與 Debug 偵錯實務'</div>
+<div class="anim-obj" id="obj-0-3">yellow comment box '論文寫作不是藝術...'</div>
+<div class="anim-obj" id="obj-0-4">progress bar '[SYSTEM INITIALIZING: A-Z FRAMEWORK...]'</div>
+</div>
+<div id="scene-1" class="scene">
+<div class="caption" id="caption-1">為什麼論文總是被拒絕？在審稿人眼中，這其實就是「編譯失敗」。傳統的寫作方法常常導致滿桌的退稿。但如果我們換個角度，用工程師 Debug 的思維來看待論文呢？這就是我們的 A-Z 框架。</div>
+<div class="anim-obj" id="obj-1-0">question title '為什麼你的論文會被拒絕?'</div>
+<div class="anim-obj" id="obj-1-1">pile of rejected papers (left side)</div>
+<div class="anim-obj" id="obj-1-2">red 'REJECTED' stamp on papers</div>
+<div class="anim-obj" id="obj-1-3">diagnostic terminal frame (right side)</div>
+<div class="anim-obj" id="obj-1-4">Error 404 message in terminal</div>
+<div class="anim-obj" id="obj-1-5">Syntax Error message in terminal</div>
+<div class="anim-obj" id="obj-1-6">Warning message in terminal</div>
+<div class="anim-obj" id="obj-1-7">solution box at bottom '解決方案: 套用 A-Z 架構...'</div>
+</div>
+<div id="scene-2" class="scene">
+<div class="caption" id="caption-2">我們的系統架構包含六大核心編譯模組。模組 1 是摘要與動機，模組 2 是簡介，接著模組 3 是相關研究，模組 4 是你提出的方法與系統，這也是核心引擎。模組 5 是模擬與實驗的壓力測試，最後模組 6 是結論。這 26 個字母，就是我們成功發表的密碼。</div>
+<div class="anim-obj" id="obj-2-0">title 'System Architecture: 六大核心編譯模組'</div>
+<div class="anim-obj" id="obj-2-1">main flow diagram lines</div>
+<div class="anim-obj" id="obj-2-2">Module 1 box '[A-F] 摘要與動機'</div>
+<div class="anim-obj" id="obj-2-3">Module 2 box '[G-L] 簡介'</div>
+<div class="anim-obj" id="obj-2-4">Module 3 box '[M-O] 相關研究'</div>
+<div class="anim-obj" id="obj-2-5">Module 4 box '[PA-PM] 提出方法與系統'</div>
+<div class="anim-obj" id="obj-2-6">highlight of Module 4 as 'The Core Engine'</div>
+<div class="anim-obj" id="obj-2-7">Module 5 box '[Q-V] 模擬與實驗'</div>
+<div class="anim-obj" id="obj-2-8">Module 6 box '[W-Z] 結論與未來'</div>
+<div class="anim-obj" id="obj-2-9">code comment box at bottom</div>
+</div>
+<div id="scene-3" class="scene">
+<div class="caption" id="caption-3">我們先看模組 1。A 代表 Attention Getter，也就是你的研究要夠吸引人。B 是 But，也就是現有方法的缺陷。C 是 Cure，你提出的解藥。接著 D 是開發，E 是實驗，F 是你的主要發現。在 Debug 模式下，你必須檢查 C 和 B 是否有對應關係。</div>
+<div class="anim-obj" id="obj-3-0">title '[Module 1] The Hook Engine: 摘要與動機 (Abstract)'</div>
+<div class="anim-obj" id="obj-3-1">A-F flow chart frame</div>
+<div class="anim-obj" id="obj-3-2">A (Attention Getter) block and description</div>
+<div class="anim-obj" id="obj-3-3">B (But) block and description</div>
+<div class="anim-obj" id="obj-3-4">C (Cure) block and description</div>
+<div class="anim-obj" id="obj-3-5">D (Development) block and description</div>
+<div class="anim-obj" id="obj-3-6">E (Experiments) block and description</div>
+<div class="anim-obj" id="obj-3-7">F (Findings) block and description</div>
+<div class="anim-obj" id="obj-3-8">yellow 'Debug Mode Alert' box</div>
+</div>
+<div id="scene-4" class="scene">
+<div class="caption" id="caption-4">模組 2 是簡介。我們從 B 延伸出 G，介紹大環境趨勢。然後 H 指出具體挑戰，I 列出文獻，J 是你的批判。最後 K 點出你的貢獻，L 給出論文架構。千萬記得 L 必須要能清楚引導讀者。</div>
+<div class="anim-obj" id="obj-4-0">title '[Module 2] Background Process: 簡介 (Introduction)'</div>
+<div class="anim-obj" id="obj-4-1">B node and [A-F] folder</div>
+<div class="anim-obj" id="obj-4-2">G (General) box and connecting arrow</div>
+<div class="anim-obj" id="obj-4-3">H (However) box and connecting arrow</div>
+<div class="anim-obj" id="obj-4-4">I (In Literatur) box and connecting arrow</div>
+<div class="anim-obj" id="obj-4-5">J (Judgement) box and connecting arrow</div>
+<div class="anim-obj" id="obj-4-6">K (Keypoint) box and connecting arrow</div>
+<div class="anim-obj" id="obj-4-7">L (List) box and connecting arrow</div>
+<div class="anim-obj" id="obj-4-8">yellow 'Debug Mode Alert' box</div>
+</div>
+<div id="scene-5" class="scene">
+<div class="caption" id="caption-5">模組 3 相關研究。M 是歸納過去的方法，N 是帶出你提出的新方法，並指出新趨勢。O 則是將這些資訊整理成圖表。記住，這裡不要只是條列，而是要進行批判與比較。</div>
+<div class="anim-obj" id="obj-5-0">title '[Module 3] The Battleground: 相關研究 (Related Work)'</div>
+<div class="anim-obj" id="obj-5-1">M (Methods) box and its content</div>
+<div class="anim-obj" id="obj-5-2">N (New Proposed) box and connecting arrow and its content</div>
+<div class="anim-obj" id="obj-5-3">O (Organize) box and connecting arrow and its content</div>
+<div class="anim-obj" id="obj-5-4">callout bubble '不要只是「列舉」論文...'</div>
+</div>
+<div id="scene-6" class="scene">
+<div class="caption" id="caption-6">這是我們最推薦的 O 模組儀表板。利用這張表格，你可以清楚展示你的方法 N 在各個指標上是如何完勝舊方法 A、B 和 C 的。這就是最有效的 SWOT 分析！</div>
+<div class="anim-obj" id="obj-6-0">title '[Diagnostic View] The O-Organize Dashboard'</div>
+<div class="anim-obj" id="obj-6-1">comparison table frame and header</div>
+<div class="anim-obj" id="obj-6-2">Method A, Method B, Method C rows with X's and O's</div>
+<div class="anim-obj" id="obj-6-3">Proposed Scheme - N row with all O's</div>
+<div class="anim-obj" id="obj-6-4">highlight of 'Proposed Scheme - N' row</div>
+<div class="anim-obj" id="obj-6-5">'偵錯實務' box at bottom</div>
+</div>
+<div id="scene-7" class="scene">
+<div class="caption" id="caption-7">模組 4 進入核心架構。從意圖、設計、機制到證明。我們必須確保架構圖 PG、實作細節 PI 以及數學證明 PM 這三者完全連貫。</div>
+<div class="anim-obj" id="obj-7-0">title '[Module 4] The Core Architecture: 提出方法與系統 (Proposed Scheme)'</div>
+<div class="anim-obj" id="obj-7-1">central 'Proposed Scheme Engine' box</div>
+<div class="anim-obj" id="obj-7-2">'Intent' box with sub-bullets PA, PB, PC</div>
+<div class="anim-obj" id="obj-7-3">'Design' box with sub-bullets PD, PE, PF</div>
+<div class="anim-obj" id="obj-7-4">'Mechanics' box with sub-bullets PG, PH, PI</div>
+<div class="anim-obj" id="obj-7-5">'Proof' box with sub-bullets PJ, PK, PL, PM</div>
+<div class="anim-obj" id="obj-7-6">highlight of PG, PI, and PM elements</div>
+</div>
+<div id="scene-8" class="scene">
+<div class="caption" id="caption-8">在 Debug 模式中，我們進行雙重掃描。掃描 1 檢查架構圖和實作是否吻合。掃描 2 檢查數學證明是否支持實作。如果出現「圖文不符」的 Fatal Error，論文絕對會被拒。</div>
+<div class="anim-obj" id="obj-8-0">title '[Debugger Mode] 系統架構的連貫性偵錯'</div>
+<div class="anim-obj" id="obj-8-1">triangle diagram with PG, PI, PM nodes</div>
+<div class="anim-obj" id="obj-8-2">'Scan 1' box appears</div>
+<div class="anim-obj" id="obj-8-3">checkmark on PG-PI edge of the triangle</div>
+<div class="anim-obj" id="obj-8-4">'Scan 2' box appears</div>
+<div class="anim-obj" id="obj-8-5">checkmark on PI-PM edge of the triangle</div>
+<div class="anim-obj" id="obj-8-6">'Fatal Error' red box</div>
+</div>
+<div id="scene-9" class="scene">
+<div class="caption" id="caption-9">模組 5 壓力測試。我們不僅需要定性指標來展現方法的優勢，也需要定量指標的具體數據。同時，我們必須與 SOTA 也就是最先進的技術進行比較，並詳述實驗設定。</div>
+<div class="anim-obj" id="obj-9-0">title '[Module 5] The Stress Test: 模擬與實驗 (Q-V)'</div>
+<div class="anim-obj" id="obj-9-1">'定性指標 (Quality)' box with gauge</div>
+<div class="anim-obj" id="obj-9-2">'定量指標 (Quantity)' box with bar chart</div>
+<div class="anim-obj" id="obj-9-3">R (Related) box at bottom</div>
+<div class="anim-obj" id="obj-9-4">arrow from R to S/T</div>
+<div class="anim-obj" id="obj-9-5">S/T (Setup & Tuning) box</div>
+<div class="anim-obj" id="obj-9-6">arrow from S/T to U/V</div>
+<div class="anim-obj" id="obj-9-7">U/V (Useful & Verify) box</div>
+</div>
+<div id="scene-10" class="scene">
+<div class="caption" id="caption-10">最後模組 6 結論。我們從 W 回顧我們提出了什麼，X 強調我們在哪裡表現最優異，Y 展示具體數據，最後 Z 總結貢獻並給出未來展望。最重要的是，你的 Z 必須呼應一開始的 A。</div>
+<div class="anim-obj" id="obj-10-0">title '[Module 6] The Output Log: 結論與未來工作 (W-Z)'</div>
+<div class="anim-obj" id="obj-10-1">A (Attention Getter) box</div>
+<div class="anim-obj" id="obj-10-2">W (What Proposed) box and connecting arrow</div>
+<div class="anim-obj" id="obj-10-3">X (eXcel) box and connecting arrow</div>
+<div class="anim-obj" id="obj-10-4">Y (Yields) box and connecting arrow</div>
+<div class="anim-obj" id="obj-10-5">Z (Zen) box and connecting arrow</div>
+<div class="anim-obj" id="obj-10-6">dashed arrow from Z back to A</div>
+<div class="anim-obj" id="obj-10-7">yellow 'Debug Mode Alert' box</div>
+</div>
+<div id="scene-11" class="scene">
+<div class="caption" id="caption-11">這就是我們完整的 A-Z 偵錯清單。在投稿前，請務必逐一檢查這 26 個節點是否都亮起綠燈。</div>
+<div class="anim-obj" id="obj-11-0">title '[Full System Synthesis] A-Z 偵錯清單'</div>
+<div class="anim-obj" id="obj-11-1">main checklist table with green checkmarks</div>
+<div class="anim-obj" id="obj-11-2">bottom instruction box '送出論文 (Submit) 前的最後掃描...'</div>
+</div>
+<div id="scene-12" class="scene">
+<div class="caption" id="caption-12">當所有測試都通過，恭喜你，0 個語法錯誤，0 個邏輯漏洞。你的論文編譯成功，準備好迎接審稿委員的挑戰了！</div>
+<div class="anim-obj" id="obj-12-0">console line '> Running A-Z Diagnostic Scan...'</div>
+<div class="anim-obj" id="obj-12-1">console line '> 0 Syntax Errors Found.'</div>
+<div class="anim-obj" id="obj-12-2">console line '> 0 Logic Gaps Detected.'</div>
+<div class="anim-obj" id="obj-12-3">progress bar filling to 100%</div>
+<div class="anim-obj" id="obj-12-4">large text 'COMPILATION SUCCESSFUL.'</div>
+<div class="anim-obj" id="obj-12-5">bottom text '你的系統已準備就緒,迎接審稿委員的挑戰。'</div>
+</div>
+
+  </div>
+  <script>const tl = gsap.timeline();
+tl.set('#scene-0', { opacity: 1 }, 0);
+tl.to('#caption-0', { opacity: 1, duration: 0.5 }, 0.1);
+tl.fromTo('#obj-0-0', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 0);
+tl.fromTo('#obj-0-1', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 1);
+tl.fromTo('#obj-0-2', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 2);
+tl.fromTo('#obj-0-3', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 8);
+tl.fromTo('#obj-0-4', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 12);
+tl.set('#scene-1', { opacity: 1 }, 20);
+tl.set('#scene-0', { opacity: 0 }, 20);
+tl.to('#caption-1', { opacity: 1, duration: 0.5 }, 20.1);
+tl.fromTo('#obj-1-0', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 20.5);
+tl.fromTo('#obj-1-1', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 22);
+tl.fromTo('#obj-1-2', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 24);
+tl.fromTo('#obj-1-3', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 28);
+tl.fromTo('#obj-1-4', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 30);
+tl.fromTo('#obj-1-5', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 32);
+tl.fromTo('#obj-1-6', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 34);
+tl.fromTo('#obj-1-7', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 38);
+tl.set('#scene-2', { opacity: 1 }, 45);
+tl.set('#scene-1', { opacity: 0 }, 45);
+tl.to('#caption-2', { opacity: 1, duration: 0.5 }, 45.1);
+tl.fromTo('#obj-2-0', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 45.5);
+tl.fromTo('#obj-2-1', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 47);
+tl.fromTo('#obj-2-2', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 49);
+tl.fromTo('#obj-2-3', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 52);
+tl.fromTo('#obj-2-4', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 55);
+tl.fromTo('#obj-2-5', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 58);
+tl.fromTo('#obj-2-6', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 59);
+tl.fromTo('#obj-2-7', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 62);
+tl.fromTo('#obj-2-8', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 65);
+tl.fromTo('#obj-2-9', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 69);
+tl.set('#scene-3', { opacity: 1 }, 75);
+tl.set('#scene-2', { opacity: 0 }, 75);
+tl.to('#caption-3', { opacity: 1, duration: 0.5 }, 75.1);
+tl.fromTo('#obj-3-0', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 75.5);
+tl.fromTo('#obj-3-1', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 77);
+tl.fromTo('#obj-3-2', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 78);
+tl.fromTo('#obj-3-3', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 82);
+tl.fromTo('#obj-3-4', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 86);
+tl.fromTo('#obj-3-5', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 90);
+tl.fromTo('#obj-3-6', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 94);
+tl.fromTo('#obj-3-7', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 98);
+tl.fromTo('#obj-3-8', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 102);
+tl.set('#scene-4', { opacity: 1 }, 110);
+tl.set('#scene-3', { opacity: 0 }, 110);
+tl.to('#caption-4', { opacity: 1, duration: 0.5 }, 110.1);
+tl.fromTo('#obj-4-0', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 110.5);
+tl.fromTo('#obj-4-1', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 112);
+tl.fromTo('#obj-4-2', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 114);
+tl.fromTo('#obj-4-3', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 118);
+tl.fromTo('#obj-4-4', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 122);
+tl.fromTo('#obj-4-5', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 126);
+tl.fromTo('#obj-4-6', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 130);
+tl.fromTo('#obj-4-7', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 134);
+tl.fromTo('#obj-4-8', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 138);
+tl.set('#scene-5', { opacity: 1 }, 145);
+tl.set('#scene-4', { opacity: 0 }, 145);
+tl.to('#caption-5', { opacity: 1, duration: 0.5 }, 145.1);
+tl.fromTo('#obj-5-0', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 145.5);
+tl.fromTo('#obj-5-1', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 147);
+tl.fromTo('#obj-5-2', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 151);
+tl.fromTo('#obj-5-3', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 157);
+tl.fromTo('#obj-5-4', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 161);
+tl.set('#scene-6', { opacity: 1 }, 170);
+tl.set('#scene-5', { opacity: 0 }, 170);
+tl.to('#caption-6', { opacity: 1, duration: 0.5 }, 170.1);
+tl.fromTo('#obj-6-0', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 170.5);
+tl.fromTo('#obj-6-1', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 172);
+tl.fromTo('#obj-6-2', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 174);
+tl.fromTo('#obj-6-3', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 178);
+tl.fromTo('#obj-6-4', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 180);
+tl.fromTo('#obj-6-5', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 185);
+tl.set('#scene-7', { opacity: 1 }, 195);
+tl.set('#scene-6', { opacity: 0 }, 195);
+tl.to('#caption-7', { opacity: 1, duration: 0.5 }, 195.1);
+tl.fromTo('#obj-7-0', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 195.5);
+tl.fromTo('#obj-7-1', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 197);
+tl.fromTo('#obj-7-2', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 199);
+tl.fromTo('#obj-7-3', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 202);
+tl.fromTo('#obj-7-4', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 205);
+tl.fromTo('#obj-7-5', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 208);
+tl.fromTo('#obj-7-6', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 212);
+tl.set('#scene-8', { opacity: 1 }, 220);
+tl.set('#scene-7', { opacity: 0 }, 220);
+tl.to('#caption-8', { opacity: 1, duration: 0.5 }, 220.1);
+tl.fromTo('#obj-8-0', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 220.5);
+tl.fromTo('#obj-8-1', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 222);
+tl.fromTo('#obj-8-2', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 226);
+tl.fromTo('#obj-8-3', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 227);
+tl.fromTo('#obj-8-4', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 232);
+tl.fromTo('#obj-8-5', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 233);
+tl.fromTo('#obj-8-6', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 238);
+tl.set('#scene-9', { opacity: 1 }, 250);
+tl.set('#scene-8', { opacity: 0 }, 250);
+tl.to('#caption-9', { opacity: 1, duration: 0.5 }, 250.1);
+tl.fromTo('#obj-9-0', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 250.5);
+tl.fromTo('#obj-9-1', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 252);
+tl.fromTo('#obj-9-2', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 256);
+tl.fromTo('#obj-9-3', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 262);
+tl.fromTo('#obj-9-4', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 264);
+tl.fromTo('#obj-9-5', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 265);
+tl.fromTo('#obj-9-6', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 267);
+tl.fromTo('#obj-9-7', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 268);
+tl.set('#scene-10', { opacity: 1 }, 278);
+tl.set('#scene-9', { opacity: 0 }, 278);
+tl.to('#caption-10', { opacity: 1, duration: 0.5 }, 278.1);
+tl.fromTo('#obj-10-0', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 278.5);
+tl.fromTo('#obj-10-1', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 280);
+tl.fromTo('#obj-10-2', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 283);
+tl.fromTo('#obj-10-3', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 287);
+tl.fromTo('#obj-10-4', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 291);
+tl.fromTo('#obj-10-5', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 295);
+tl.fromTo('#obj-10-6', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 300);
+tl.fromTo('#obj-10-7', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 302);
+tl.set('#scene-11', { opacity: 1 }, 310);
+tl.set('#scene-10', { opacity: 0 }, 310);
+tl.to('#caption-11', { opacity: 1, duration: 0.5 }, 310.1);
+tl.fromTo('#obj-11-0', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 310.5);
+tl.fromTo('#obj-11-1', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 312);
+tl.fromTo('#obj-11-2', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 318);
+tl.set('#scene-12', { opacity: 1 }, 328);
+tl.set('#scene-11', { opacity: 0 }, 328);
+tl.to('#caption-12', { opacity: 1, duration: 0.5 }, 328.1);
+tl.fromTo('#obj-12-0', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 328.5);
+tl.fromTo('#obj-12-1', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 330);
+tl.fromTo('#obj-12-2', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 332);
+tl.fromTo('#obj-12-3', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 334);
+tl.fromTo('#obj-12-4', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 338);
+tl.fromTo('#obj-12-5', { opacity: 0, y: 50, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 342);
+</script>
+</body>
+</html>

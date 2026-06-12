@@ -1,0 +1,58 @@
+[
+    {
+        "start": 0.0,
+        "end": 10.0,
+        "text": "Hello everyone, welcome to the course on OpenSpec and Antigravity.",
+        "keep_score": 0.9,
+        "topic": "Introduction"
+    },
+    {
+        "start": 10.0,
+        "end": 20.0,
+        "text": "Today we're going to dive deep into Spec-Driven Development.",
+        "keep_score": 0.95,
+        "topic": "Introduction"
+    },
+    {
+        "start": 20.0,
+        "end": 35.0,
+        "text": "Before we begin, let me just adjust my microphone... okay, that's better.",
+        "keep_score": 0.1,
+        "topic": "Setup"
+    },
+    {
+        "start": 35.0,
+        "end": 50.0,
+        "text": "OpenSpec solves the underspecification problem by requiring a formal markdown design before coding.",
+        "keep_score": 0.98,
+        "topic": "Core Concepts"
+    },
+    {
+        "start": 50.0,
+        "end": 65.0,
+        "text": "Antigravity acts as the project engineering assistant, helping us manage these files.",
+        "keep_score": 0.92,
+        "topic": "Core Concepts"
+    },
+    {
+        "start": 65.0,
+        "end": 80.0,
+        "text": "Let's take a look at the slide on the screen, which outlines the 7 production methods.",
+        "keep_score": 0.85,
+        "topic": "Methodology"
+    },
+    {
+        "start": 80.0,
+        "end": 100.0,
+        "text": "The third method combines animation with original clips, providing the best of both worlds.",
+        "keep_score": 0.96,
+        "topic": "Methodology"
+    },
+    {
+        "start": 100.0,
+        "end": 120.0,
+        "text": "This concludes our lecture. Don't forget to practice creating your own Storyboard YAML.",
+        "keep_score": 0.9,
+        "topic": "Conclusion"
+    }
+]

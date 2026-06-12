@@ -1,0 +1,7 @@
+{
+  "name": "method-10-director",
+  "private": true,
+  "scripts": {
+    "render": "npx --yes hyperframes@latest render"
+  }
+}

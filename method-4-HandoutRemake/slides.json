@@ -1,0 +1,51 @@
+[
+    {
+        "id": "slide_001",
+        "title": "Introduction to Open Design",
+        "body": [
+            "Welcome to the presentation on Open Design. Today we will cover the core concepts and capabilities."
+        ],
+        "duration": 4.5
+    },
+    {
+        "id": "slide_002",
+        "title": "#What is Open Design?",
+        "body": [
+            "Local-first, open-source design tool.",
+            "Native desktop app for macOS and Windows.",
+            "Runs entirely on local coding agents.",
+            "Protects privacy by keeping data on your laptop."
+        ],
+        "duration": 9.0
+    },
+    {
+        "id": "slide_003",
+        "title": "#Core Features",
+        "body": [
+            "**Prototypes**: Web, desktop, and mobile HTML artifacts.",
+            "**HyperFrames**: Programmatic motion and animated graphics.",
+            "**Decks**: Slide presentations exported to PDF or PPTX.",
+            "**Images**: High-resolution brand-grade visual assets."
+        ],
+        "duration": 9.0
+    },
+    {
+        "id": "slide_004",
+        "title": "#The Workflow",
+        "body": [
+            "Start with a brief.",
+            "Lock the design direction.",
+            "Stream the artifact in real-time.",
+            "Hand off to engineering effortlessly."
+        ],
+        "duration": 9.0
+    },
+    {
+        "id": "slide_005",
+        "title": "#Conclusion",
+        "body": [
+            "Open Design is the Figma alternative for the agent era. Let's start building!"
+        ],
+        "duration": 4.5
+    }
+]

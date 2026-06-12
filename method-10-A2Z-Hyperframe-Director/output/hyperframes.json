@@ -1,0 +1,80 @@
+{
+  "version": "1.0",
+  "fps": 60,
+  "width": 1920,
+  "height": 1080,
+  "output": "render.mp4",
+  "audio": [
+    {
+      "file": "assets/tts_slide_1.mp3",
+      "start": 0.0,
+      "volume": 1.0
+    },
+    {
+      "file": "assets/tts_slide_2.mp3",
+      "start": 20.0,
+      "volume": 1.0
+    },
+    {
+      "file": "assets/tts_slide_3.mp3",
+      "start": 45.0,
+      "volume": 1.0
+    },
+    {
+      "file": "assets/tts_slide_4.mp3",
+      "start": 75.0,
+      "volume": 1.0
+    },
+    {
+      "file": "assets/tts_slide_5.mp3",
+      "start": 110.0,
+      "volume": 1.0
+    },
+    {
+      "file": "assets/tts_slide_6.mp3",
+      "start": 145.0,
+      "volume": 1.0
+    },
+    {
+      "file": "assets/tts_slide_7.mp3",
+      "start": 170.0,
+      "volume": 1.0
+    },
+    {
+      "file": "assets/tts_slide_8.mp3",
+      "start": 195.0,
+      "volume": 1.0
+    },
+    {
+      "file": "assets/tts_slide_9.mp3",
+      "start": 220.0,
+      "volume": 1.0
+    },
+    {
+      "file": "assets/tts_slide_10.mp3",
+      "start": 250.0,
+      "volume": 1.0
+    },
+    {
+      "file": "assets/tts_slide_11.mp3",
+      "start": 278.0,
+      "volume": 1.0
+    },
+    {
+      "file": "assets/tts_slide_12.mp3",
+      "start": 310.0,
+      "volume": 1.0
+    },
+    {
+      "file": "assets/tts_slide_13.mp3",
+      "start": 328.0,
+      "volume": 1.0
+    },
+    {
+      "file": "assets/bgm.mp3",
+      "start": 0,
+      "volume": 0.1,
+      "loop": true
+    }
+  ]
+}
